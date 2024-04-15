@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="style.css">
 </head>
 
-<body>
+<body background="/images/background.jpg">
     <header>
         <h1>Mavwu's Retail</h1>
 
@@ -27,9 +27,25 @@
 
     <footer>
         <div class="footer-bottom">
-            &copy; 2024 MAvwu Retail | Designed by Alfred Mavwu
+            &copy; 2024 Mavwu Retail | Designed by Alfred Mavwu
         </div>
     </footer>
+
+    <script>
+        // smooth scrolling
+        document.addEventListener('DOMContentLoaded', () => {
+            const backToTopButton = document.getElementById('top');
+
+            if (backToTopButton) {
+                backToTopButton.addEventListener('click', () => {
+                    window.scrollTo({
+                        top: 0,
+                        behavior: 'smooth'
+                    });
+                });
+            }
+        });
+    </script>
 </body>
 
 </html>
