@@ -26,12 +26,12 @@ app.listen(port, () => {
 });
 
 // create garage table
-function createLocalGarageTable() {
+function createGarageTable() {
     sql = `CREATE TABLE IF NOT EXISTS garage (
-            id INT NOT NULL AUTO_INCREMENT,
-            name VARCHAR(255),
-            location VARCHAR(255),
-            PRIMARY KEY(id)
+            garage_id INT NOT NULL AUTO_INCREMENT,
+            garage_name VARCHAR(255),
+            garage_address VARCHAR(255),
+            PRIMARY KEY(garage_id)
         );`;
 
     connection.query(sql, (err, results, fields) => {
@@ -47,10 +47,13 @@ function createLocalGarageTable() {
 // create warehouse table
 function createWarehouseTable() {
     sql = `CREATE TABLE IF NOT EXISTS warehouse (
-            id INT NOT NULL AUTO_INCREMENT,
-            name VARCHAR(255),
-            location VARCHAR(255),
-            PRIMARY KEY(id)
+            warehouse_id INT NOT NULL AUTO_INCREMENT,
+            warehouse_name VARCHAR(255),
+            warehouse_address VARCHAR(255),
+            national_price DECIMAL(10,2),
+            national_discount DECIMAL(10,2),
+            last_dispatch_date date,
+            PRIMARY KEY(warehouse_id)
         );`;
 
     connection.query(sql, (err, results, fields) => {
@@ -66,11 +69,13 @@ function createWarehouseTable() {
 // create staff table
 function createStaffTable() {
     sql = `CREATE TABLE IF NOT EXISTS staff (
-            id INT NOT NULL AUTO_INCREMENT,
+            staff_id INT NOT NULL AUTO_INCREMENT,
             first_name VARCHAR(255),
             last_name VARCHAR(255),
+            staff_email VARCHAR(255),
+            staff_phone VARCHAR(255),
             hire_date date,
-            PRIMARY KEY(id)
+            PRIMARY KEY(staff_id)
         );`;
 
     connection.query(sql, (err, results, fields) => {
@@ -85,9 +90,11 @@ function createStaffTable() {
 // create parts table
 function createPartsTable() {
     sql = `CREATE TABLE IF NOT EXISTS parts  (
-            id INT NOT NULL AUTO_INCREMENT,
+            part_id INT NOT NULL AUTO_INCREMENT,
             part_name VARCHAR(255),
-            PRIMARY KEY(id)
+            part_price DECIMAL(10,2),
+            part_quantity INT,
+            PRIMARY KEY(part_id)
         );`;
 
     connection.query(sql, (err, results, fields) => {
@@ -102,10 +109,13 @@ function createPartsTable() {
 // create order table
 function createOrderTable() {
     sql = `CREATE TABLE IF NOT EXISTS orders (
-            id INT NOT NULL AUTO_INCREMENT,
+            order_id INT NOT NULL AUTO_INCREMENT,
             order_date DATETIME,
+            customer_id int,
+            part_id int,
+            total_price DECIMAL(10,2),
             order_status VARCHAR(255),
-            PRIMARY KEY(id)
+            PRIMARY KEY(order_id)
         );`;
 
     connection.query(sql, (err, results, fields) => {
@@ -120,16 +130,13 @@ function createOrderTable() {
 // create customer table
 function createCustomerTable() {
     sql = `CREATE TABLE IF NOT EXISTS customer (
-            id INT NOT NULL AUTO_INCREMENT,
+            customer_id INT NOT NULL AUTO_INCREMENT,
             first_name VARCHAR(255),
             last_name VARCHAR(255),
-            phone_number VARCHAR(255),
-            email VARCHAR(255),
-            address VARCHAR(255),
-            city VARCHAR(255),
-            state VARCHAR(255),
-            zip VARCHAR(255),
-            PRIMARY KEY(id)
+            customer_phone VARCHAR(255),
+            customer_email VARCHAR(255),
+            customer_address VARCHAR(255),
+            PRIMARY KEY(customer_id)
         );`;
 
     connection.query(sql, (err, results, fields) => {
@@ -138,16 +145,18 @@ function createCustomerTable() {
         } else {
             console.log('Successfully created Customer Table');
         }
-    })
+    });
 }
 
 // create manager table
 function createManagerTable() {
     sql = `CREATE TABLE IF NOT EXISTS manager (
-            id INT NOT NULL AUTO_INCREMENT,
+            manager_id INT NOT NULL AUTO_INCREMENT,
             first_name VARCHAR(255),
             last_name VARCHAR(255),
-            PRIMARY KEY(id)
+            manager_email VARCHAR(255),
+            manager_phone int,
+            PRIMARY KEY(manager_id)
         );`;
 
     connection.query(sql, (err, results, fields) => {
@@ -160,7 +169,7 @@ function createManagerTable() {
 }
 
 // run table creation methods
-createLocalGarageTable();
+createGarageTable();
 createWarehouseTable();
 createStaffTable();
 createPartsTable();
