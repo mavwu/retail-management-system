@@ -2,16 +2,11 @@
 <html lang="en">
 
 <head>
-    <title>Mavwu Retail</title>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="author" content="Alfred Mavwu">
-    <meta name="description" content="">
+    <link rel="stylesheet" href="/public/style.css">
+    <title>Login to your account</title>
 
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Candal|Lora">
-    <script src="https://kit.fontawesome.com/09e2129185.js" crossorigin="anonymous"></script>
     <style>
         header {
             background: rgb(5, 5, 154);
@@ -57,6 +52,7 @@
             border: 2px black solid;
         }
     </style>
+
 </head>
 
 <body background="/public/images/background.jpg">
@@ -64,20 +60,19 @@
         <div class="heading-container">
             <h1>Mavwu's Retail</h1>
         </div>
-
     </header>
+    <main>
+        <div class="page-wrapper">
+            <form>
+                <h2>Enter your account details to Login</h2>
+                <input type="text" placeholder="Enter email or number" required> <br> <br>
+                <input type="text" placeholder="Enter password" required> <br> <br>
 
-    <div class="page-wrapper">
-        <main>
-            <h2>Welcome to the Official Mavwu Retail Website.</h2>
-            <div class="buttons-container">
-                <button class="login">Login</button><br><br>
-                <button class="signup">Sign Up</button>
-            </div>
+                <input type="submit" value="Login">
+            </form>
 
-        </main>
-
-    </div>
+        </div>
+    </main>
 
     <footer>
         <div class="footer-bottom">
@@ -85,21 +80,6 @@
         </div>
     </footer>
 
-    <script>
-        // smooth scrolling
-        document.addEventListener('DOMContentLoaded', () => {
-            const backToTopButton = document.getElementById('top');
-
-            if (backToTopButton) {
-                backToTopButton.addEventListener('click', () => {
-                    window.scrollTo({
-                        top: 0,
-                        behavior: 'smooth'
-                    });
-                });
-            }
-        });
-    </script>
 </body>
 
 </html>

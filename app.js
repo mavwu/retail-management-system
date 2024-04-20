@@ -1,20 +1,52 @@
 const express = require("express");
 const mysql = require("mysql");
 
-const connection = mysql.createConnection({
+var connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
     password: '',
-    database: 'mavwu_retail_db',
     port: 3306
 });
 
+function createDatabase() {
+    sql = `CREATE DATABASE IF NOT EXISTS mavwu_retail_db;`;
+
+    connection.query(sql, err => {
+        if (err) {
+            console.error('Error creating Database: ' + err.stack);
+            return;
+        } else {
+            console.log('Database created successfully');
+
+            connection.changeUser({ database: 'mavwu_retail_db' }, (err) => {
+                if (err) {
+                    console.error('Error selecting Database: ' + err.stack);
+                    return;
+                } else {
+                    console.log('connected to Database successfully');
+
+                    // run table creation methods
+                    createGarageTable();
+                    createWarehouseTable();
+                    createStaffTable();
+                    createPartsTable();
+                    createOrderTable();
+                    createCustomerTable();
+                    createManagerTable();
+                    createUsersTable();
+                }
+            })
+        }
+    });
+}
+
 connection.connect((err => {
-    if(err) {
-        console.error('Error connecting to MySQL database: ' + err.stack);
+    if (err) {
+        console.error('Error connecting to MySQL server: ' + err.stack);
         return;
     }
-    console.log('Connected to MySQL database successfully!!')
+    console.log('Connected to MySQL server successfully!!');
+    createDatabase();
 }))
 
 const app = express();
@@ -35,7 +67,7 @@ function createGarageTable() {
         );`;
 
     connection.query(sql, (err, results, fields) => {
-        if(err) {
+        if (err) {
             console.error('Error creating Garage Table: ' + err.stack);
             return;
         } else {
@@ -57,7 +89,7 @@ function createWarehouseTable() {
         );`;
 
     connection.query(sql, (err, results, fields) => {
-        if(err) {
+        if (err) {
             console.error('Error creating Warehouse Table: ' + err.stack);
             return;
         } else {
@@ -79,7 +111,7 @@ function createStaffTable() {
         );`;
 
     connection.query(sql, (err, results, fields) => {
-        if(err) {
+        if (err) {
             console.error('Error creating Staff Table: ' + err.stack);
         } else {
             console.log('Successfully created Staff Table');
@@ -98,7 +130,7 @@ function createPartsTable() {
         );`;
 
     connection.query(sql, (err, results, fields) => {
-        if(err) {
+        if (err) {
             console.error('Error creating Parts Table: ' + err.stack);
         } else {
             console.log('Successfully created Parts Table');
@@ -119,7 +151,7 @@ function createOrderTable() {
         );`;
 
     connection.query(sql, (err, results, fields) => {
-        if(err) {
+        if (err) {
             console.error('Error creating Order Table: ' + err.stack);
         } else {
             console.log('Successfully created Order Table');
@@ -140,7 +172,7 @@ function createCustomerTable() {
         );`;
 
     connection.query(sql, (err, results, fields) => {
-        if(err) {
+        if (err) {
             console.error('Error creating Customer Table: ' + err.stack);
         } else {
             console.log('Successfully created Customer Table');
@@ -160,7 +192,7 @@ function createManagerTable() {
         );`;
 
     connection.query(sql, (err, results, fields) => {
-        if(err) {
+        if (err) {
             console.error('Error creating Manager Table: ' + err.stack);
         } else {
             console.log('Successfully created Manager Table');
@@ -168,11 +200,22 @@ function createManagerTable() {
     })
 }
 
-// run table creation methods
-createGarageTable();
-createWarehouseTable();
-createStaffTable();
-createPartsTable();
-createOrderTable();
-createCustomerTable();
-createManagerTable();
+function createUsersTable() {
+    sql = `CREATE TABLE IF NOT EXISTS users (
+            user_id INT NOT NULL AUTO_INCREMENT,
+            first_name VARCHAR(255),
+            last_name VARCHAR(255),
+            email VARCHAR(255),
+            password VARCHAR(255),
+            PRIMARY KEY(user_id)
+        );`;
+
+    connection.query(sql, (err, results, fields) => {
+        if (err) {
+            console.error('Error creating Users Table: ' + err.stack);
+        } else {
+            console.log('Successfully created Users Table');
+        }
+    });
+}
+

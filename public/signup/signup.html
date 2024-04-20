@@ -2,16 +2,10 @@
 <html lang="en">
 
 <head>
-    <title>Mavwu Retail</title>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="author" content="Alfred Mavwu">
-    <meta name="description" content="">
+    <title>Sign Up for your account</title>
 
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Candal|Lora">
-    <script src="https://kit.fontawesome.com/09e2129185.js" crossorigin="anonymous"></script>
     <style>
         header {
             background: rgb(5, 5, 154);
@@ -64,42 +58,27 @@
         <div class="heading-container">
             <h1>Mavwu's Retail</h1>
         </div>
-
     </header>
+    <main>
+        <div class="page-wrapper">
+            <form action="/userRegistration" ="post">
+                <h2>Enter your details to Sign Up</h2>
+                <input type="text" id="first_name" name="first_name" placeholder="Enter your first name" required> <br> <br>
+                <input type="text" id="last_name" name="last_name" placeholder="Enter your last name" required> <br> <br>
+                <input type="text" id="email" name="email" placeholder="Enter email or number" required> <br> <br>
+                <input type="text" id="pass" name="password" placeholder="Enter password" required> <br> <br>
 
-    <div class="page-wrapper">
-        <main>
-            <h2>Welcome to the Official Mavwu Retail Website.</h2>
-            <div class="buttons-container">
-                <button class="login">Login</button><br><br>
-                <button class="signup">Sign Up</button>
-            </div>
+                <input type="submit" value="Sign Up">
+            </form>
 
-        </main>
-
-    </div>
+        </div>
+    </main>
 
     <footer>
         <div class="footer-bottom">
             &copy; 2024 Mavwu Retail | Designed by Alfred Mavwu
         </div>
     </footer>
-
-    <script>
-        // smooth scrolling
-        document.addEventListener('DOMContentLoaded', () => {
-            const backToTopButton = document.getElementById('top');
-
-            if (backToTopButton) {
-                backToTopButton.addEventListener('click', () => {
-                    window.scrollTo({
-                        top: 0,
-                        behavior: 'smooth'
-                    });
-                });
-            }
-        });
-    </script>
 </body>
 
 </html>
