@@ -13,21 +13,25 @@ const staff = "staff";
 const warehouse = "warehouse";
 const garage = "garage";
 
-// create connection to mySQL server
-var connection = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: '',
-    port: 3306
-});
-
 // create express app
 const app = express();
-const port = 3000;
-app.use(express.static("public"));
+const PORT = 3000;
+app.use(express.static("public"));  // serve static files from public directory
 
-app.use(bodyParser.urlencoded({extended: true}));  // to support URL-encoded bodies
-app.use(bodyParser.json());  // to support JSON-encoded bodies
+// port setup for server to listen on
+app.listen(PORT, () => {
+    console.log(`Server running at http://localhost:${PORT}`);
+});
+
+const db = new sqlite3.Database(dbName, (err) => {
+    if(err) {
+        console.error("There was an error connecting to the SQLite Database:", err);
+    } else {
+        // upon successfully connection run createDatabase() method
+        console.log("Connected to the SQLite Database");
+        createDatabase();
+    }
+})
 
 function createDatabase() {
     
@@ -42,10 +46,6 @@ function createDatabase() {
                     createManagerTable();
                     createUsersTable();
 }
-
-app.listen(port, () => {
-    console.log(`Server running at http://localhost:${port}`);
-});
 
 // create garage table
 function createGarageTable() {
