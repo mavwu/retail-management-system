@@ -1,6 +1,19 @@
 const express = require("express");
 const mysql = require("mysql");
+const bodyParser = require("body-parser"); //  parse data from request body
 
+// table names and database name
+const dbName = "mavwu_retail_db";
+const users = "users";
+const manager = "manager";
+const customer = "customer";
+const order = "orders";
+const parts = "parts";
+const staff = "staff";
+const warehouse = "warehouse";
+const garage = "garage";
+
+// create connection to mySQL server
 var connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
@@ -8,8 +21,16 @@ var connection = mysql.createConnection({
     port: 3306
 });
 
+// create express app
+const app = express();
+const port = 3000;
+app.use(express.static("public"));
+
+app.use(bodyParser.urlencoded({extended: true}));  // to support URL-encoded bodies
+app.use(bodyParser.json());  // to support JSON-encoded bodies
+
 function createDatabase() {
-    sql = `CREATE DATABASE IF NOT EXISTS mavwu_retail_db;`;
+    sql = `CREATE DATABASE IF NOT EXISTS ${dbName};`;
 
     connection.query(sql, err => {
         if (err) {
@@ -18,12 +39,12 @@ function createDatabase() {
         } else {
             console.log('Database created successfully');
 
-            connection.changeUser({ database: 'mavwu_retail_db' }, (err) => {
+            connection.changeUser({ database: dbName }, (err) => {
                 if (err) {
                     console.error('Error selecting Database: ' + err.stack);
                     return;
                 } else {
-                    console.log('connected to Database successfully');
+                    console.log('Connected to Database successfully');
 
                     // run table creation methods
                     createGarageTable();
@@ -49,17 +70,13 @@ connection.connect((err => {
     createDatabase();
 }))
 
-const app = express();
-const port = 3000;
-app.use(express.static("public"));
-
 app.listen(port, () => {
     console.log(`Server running at http://localhost:${port}`);
 });
 
 // create garage table
 function createGarageTable() {
-    sql = `CREATE TABLE IF NOT EXISTS garage (
+    sql = `CREATE TABLE IF NOT EXISTS ${garage} (
             garage_id INT NOT NULL AUTO_INCREMENT,
             garage_name VARCHAR(255),
             garage_address VARCHAR(255),
@@ -78,7 +95,7 @@ function createGarageTable() {
 
 // create warehouse table
 function createWarehouseTable() {
-    sql = `CREATE TABLE IF NOT EXISTS warehouse (
+    sql = `CREATE TABLE IF NOT EXISTS ${warehouse} (
             warehouse_id INT NOT NULL AUTO_INCREMENT,
             warehouse_name VARCHAR(255),
             warehouse_address VARCHAR(255),
@@ -100,7 +117,7 @@ function createWarehouseTable() {
 
 // create staff table
 function createStaffTable() {
-    sql = `CREATE TABLE IF NOT EXISTS staff (
+    sql = `CREATE TABLE IF NOT EXISTS ${staff} (
             staff_id INT NOT NULL AUTO_INCREMENT,
             first_name VARCHAR(255),
             last_name VARCHAR(255),
@@ -121,7 +138,7 @@ function createStaffTable() {
 
 // create parts table
 function createPartsTable() {
-    sql = `CREATE TABLE IF NOT EXISTS parts  (
+    sql = `CREATE TABLE IF NOT EXISTS ${parts}  (
             part_id INT NOT NULL AUTO_INCREMENT,
             part_name VARCHAR(255),
             part_price DECIMAL(10,2),
@@ -140,7 +157,7 @@ function createPartsTable() {
 
 // create order table
 function createOrderTable() {
-    sql = `CREATE TABLE IF NOT EXISTS orders (
+    sql = `CREATE TABLE IF NOT EXISTS ${order} (
             order_id INT NOT NULL AUTO_INCREMENT,
             order_date DATETIME,
             customer_id int,
@@ -161,7 +178,7 @@ function createOrderTable() {
 
 // create customer table
 function createCustomerTable() {
-    sql = `CREATE TABLE IF NOT EXISTS customer (
+    sql = `CREATE TABLE IF NOT EXISTS ${customer} (
             customer_id INT NOT NULL AUTO_INCREMENT,
             first_name VARCHAR(255),
             last_name VARCHAR(255),
@@ -182,7 +199,7 @@ function createCustomerTable() {
 
 // create manager table
 function createManagerTable() {
-    sql = `CREATE TABLE IF NOT EXISTS manager (
+    sql = `CREATE TABLE IF NOT EXISTS ${manager} (
             manager_id INT NOT NULL AUTO_INCREMENT,
             first_name VARCHAR(255),
             last_name VARCHAR(255),
@@ -201,7 +218,7 @@ function createManagerTable() {
 }
 
 function createUsersTable() {
-    sql = `CREATE TABLE IF NOT EXISTS users (
+    sql = `CREATE TABLE IF NOT EXISTS ${users} (
             user_id INT NOT NULL AUTO_INCREMENT,
             first_name VARCHAR(255),
             last_name VARCHAR(255),
@@ -218,4 +235,3 @@ function createUsersTable() {
         }
     });
 }
-
