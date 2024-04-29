@@ -257,8 +257,49 @@ app.post("/userRegistration", async (req, res) => {
         }
     } catch (err) {
         console.error("There was an error during registration:", err);
+     
         res.status(400).send("Bad Request");
     }
 });
 
 // login route *************************************************************
+app.post("/submitLoginDetails", async (req, res) => {
+    const {email, password} = req.body;
+
+    try {
+        // checking if email exists in database
+        const userExist = await new Promise((resolve) => {
+            db.get(`SELECT * FROM ${user}
+                    WHERE email = ?`, [email], (err, row) => {
+                        resolve(row);
+                    });
+        });
+
+        console.log("User Exist:", userExist);
+
+        // if user is not found in database
+        if(!userExist) {
+            console.log("User not found");
+            return res.status(401).send("Invalid email or password!")
+        } 
+        
+        // if user is found in database
+        else {
+            let enteredPassHash = await bcrypt.hash(password, salt);
+
+            // compare if password entered is the same as password in database
+            const passValidation = bcrypt.compare(password, userExist.password);
+
+            if(passValidation) {
+                console.log("Successful login!");
+                res.redirect(`/dashboard/dashboard.html`);  // redirect to dashboard
+            } else {
+                console.log("Invalid email or password");
+                return res.status(401).send("Invalid email or password");
+            }
+        }
+
+    } catch (err) {
+        console.error("An error occurred during login:", err);
+    }
+});

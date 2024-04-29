@@ -67,10 +67,10 @@
     </header>
     <main>
         <div class="page-wrapper">
-            <form>
+            <form action="/submitLoginDetails" method="post">
                 <h2>Enter your account details to Login</h2>
-                <input type="text" placeholder="Enter email or number" required> <br> <br>
-                <input type="text" placeholder="Enter password" required> <br> <br>
+                <input type="text" name="email" placeholder="Enter email or number" required> <br> <br>
+                <input type="password" name="password" placeholder="Enter password" required> <br> <br>
 
                 <input type="submit" value="Login">
             </form>
