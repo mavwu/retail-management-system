@@ -6,6 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign Up for your account</title>
 
+    <link rel="stylesheet" href="../style.css"> 
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Candal|Lora">
+    <script src="https://kit.fontawesome.com/09e2129185.js" crossorigin="anonymous"></script>
+
     <style>
         header {
             background: rgb(5, 5, 154);
@@ -53,7 +57,7 @@
     </style>
 </head>
 
-<body background="/public/images/background.jpg">
+<body style="background-image: url('../images/background.jpg');"
     <header>
         <div class="heading-container">
             <h1>Mavwu's Retail</h1>
@@ -66,8 +70,9 @@
                 <input type="text" id="first_name" name="first_name" placeholder="Enter your first name" required> <br> <br>
                 <input type="text" id="last_name" name="last_name" placeholder="Enter your last name" required> <br> <br>
                 <input type="text" id="email" name="email" placeholder="Enter your email" required> <br> <br>
-                <input type="text" id="pass" name="password" placeholder="Enter your phone"" required> <br> <br>
-                <input type="text" id="repass" name="password" placeholder="Enter password" required> <br> <br>
+                <input type="text" id="phone" name="phone" placeholder="Enter your phone number" required> <br> <br>
+                <input type="password" id="pass" name="password" placeholder="Enter your password" required> <br> <br>
+                <input type="password" id="repass" name="repassword" placeholder="Re-enter your password" required> <br> <br>
 
                 <button type="submit">Sign Up</button>
             </form>

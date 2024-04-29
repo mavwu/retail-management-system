@@ -1,6 +1,10 @@
-const express = require("express");
-const sqlite3 = require("sqlite3");
+const express = require("express");  // import express. js
+const sqlite3 = require("sqlite3");  // import sqlite databse module
 const bodyParser = require("body-parser"); //  parse data from request body
+const bcrypt = require("bcrypt"); // import module for password hashing 
+
+// some important constants
+const salt = 10;
 
 // table names and database name
 const dbName = "mavwu_retail_db";
@@ -18,6 +22,8 @@ const dispatch = "dispatches";
 const app = express();
 const PORT = 3000;
 app.use(express.static("public"));  // serve static files from public directory
+app.use(bodyParser.json());  // parse JSON bodies
+app.use(bodyParser.urlencoded({ extended: true}));  // parse URL-encoded bodies
 
 // port setup for server to listen on
 app.listen(PORT, () => {
@@ -56,12 +62,12 @@ function createGarageTable() {
             garage_name TEXT NOT NULL,
             garage_address TEXT NOT NULL
         );`, async (err) => {
-            if (err) {
-                console.error("Failed to create Garage Table:", err);
-            } else {
-                console.log("Successfully created garage table");
-            }
+        if (err) {
+            console.error("Failed to create Garage Table:", err);
+        } else {
+            console.log("Successfully created garage table");
         }
+    }
     );
 }
 
@@ -79,12 +85,12 @@ function createWarehouseTable() {
             FOREIGN KEY (dispatch_id) REFERENCES dispatches(dispatch_id),
             FOREIGN KEY (garage_id) REFERENCES garage(garage_id)
         );`, async (err) => {
-            if (err) {
-                console.error("Failed to create Warehouse Table:", err);
-            } else {
-                console.log("Successfully created warehouse table");
-            }
+        if (err) {
+            console.error("Failed to create Warehouse Table:", err);
+        } else {
+            console.log("Successfully created warehouse table");
         }
+    }
     );
 }
 
@@ -96,12 +102,12 @@ function createStaffTable() {
             staff_name TEXT NOT NULL,
             staff_address TEXT NOT NULL
         );`, async (err) => {
-            if(err) {
-                console.error("Failed to create Staff Table:", err);
-            } else {
-                console.log("Successfully created staff table");
-            }
+        if (err) {
+            console.error("Failed to create Staff Table:", err);
+        } else {
+            console.log("Successfully created staff table");
         }
+    }
     );
 }
 
@@ -113,12 +119,12 @@ function createPartsTable() {
             part_name TEXT NOT NULL,
             part_price INTEGER NOT NULL
         );`, async (err) => {
-            if(err) {
-                console.error("Failed to create Parts Table:", err);
-            } else {
-                console.log("Successfully created parts table");
-            }
+        if (err) {
+            console.error("Failed to create Parts Table:", err);
+        } else {
+            console.log("Successfully created parts table");
         }
+    }
     );
 }
 
@@ -131,12 +137,12 @@ function createOrderTable() {
             order_status TEXT NOT NULL,
             order_total INTEGER NOT NULL
         );`, async (err) => {
-            if(err) {
-                console.error("Failed to create Order Table");
-            } else {
-                console.log("Successfully created order table");
-            }
+        if (err) {
+            console.error("Failed to create Order Table");
+        } else {
+            console.log("Successfully created order table");
         }
+    }
     );
 }
 
@@ -149,12 +155,12 @@ function createCustomerTable() {
             customer_email TEXT NOT NULL,
             customer_phone INTEGER NOT NULL
         );`, async (err) => {
-            if(err) {
-                console.error("Failed to create Customer Table:", err);
-            } else {
-                console.log("Successfully created Customer Table");
-            }
+        if (err) {
+            console.error("Failed to create Customer Table:", err);
+        } else {
+            console.log("Successfully created Customer Table");
         }
+    }
     );
 }
 
@@ -167,12 +173,12 @@ function createManagerTable() {
             manager_email TEXT NOT NULL,
             manager_phone INTEGER NOT NULL
         );`, async (err) => {
-            if(err) {
-                console.error("Failed to create Users Table");
-            } else {
-                console.log("Successfully created Manager Table");
-            }
+        if (err) {
+            console.error("Failed to create Users Table");
+        } else {
+            console.log("Successfully created Manager Table");
         }
+    }
     );
 }
 
@@ -186,12 +192,12 @@ function createUsersTable() {
             last_name TEXT NOT NULL,
             password TEXT NOT NULL
         );`, async (err) => {
-            if (err) {
-                console.error("Failed to create Users Table:", err);
-            } else {
-                console.log("Successfully created Users Table");
-            }
+        if (err) {
+            console.error("Failed to create Users Table:", err);
+        } else {
+            console.log("Successfully created Users Table");
         }
+    }
     );
 }
 
@@ -206,11 +212,53 @@ function createDispatchesTable() {
             FOREIGN KEY (garage_id) REFERENCES garage(garage_id),
             FOREIGN KEY (warehouse_id) REFERENCES warehouse(warehouse_id)
         );`, async (err) => {
-            if (err) {
-                console.err("Failed to create Dispatches Table:", err);
-            } else {
-                console.log("Successfully created Dispatches Table");
-            }
+        if (err) {
+            console.err("Failed to create Dispatches Table:", err);
+        } else {
+            console.log("Successfully created Dispatches Table");
         }
+    }
     );
 }
+
+// sign up route **********************************************
+app.post("/userRegistration", async (req, res) => {
+    const { first_name, last_name, email, phone, password } = req.body;
+
+    try {
+        // check if password is at least 8 characters 
+
+        
+        // check if user exists in system
+        const userExist = await new Promise((resolve) => {
+            db.get(`SELECT * FROM ${user}
+                WHERE email = ? `, [email], (err, row) => {
+                resolve(row);
+            });
+        });
+
+        if (userExist) {
+            return res.status(400).send("Email already in use by another account")
+        } else {
+            // user does not exist proceed with hashing password
+            const hashPassword = await bcrypt.hash(password, salt);
+
+            // insert a user to the database
+            db.run(`INSERT INTO ${user} (email, phone, first_name, last_name, password)
+                    VALUES (?, ?, ?, ?, ?)`, [email, phone, first_name, last_name, hashPassword], (err) => {
+                if (err) {
+                    console.error("There was an error during registration:", err);
+                    res.status(500).send("Internal Server Error");
+                } else {
+                    console.log("New user successfully added to database!");
+                    res.redirect("/login/login.html");  // redirect user to login page after successful login
+                }
+            });
+        }
+    } catch (err) {
+        console.error("There was an error during registration:", err);
+        res.status(400).send("Bad Request");
+    }
+});
+
+// login route *************************************************************
