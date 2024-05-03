@@ -1,22 +1,86 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add stock for purchase at warehouse</title>
 </head>
+
 <body>
     <header>
 
     </header>
     <div class="page-wrapper">
         <main>
-            <input type="text" name="stock"
+            <form action="/addStock" method="post">
+                <select id="stockSelection" name="stock_name" required>
+                    <option value="" disabled selected hidden>Select stock to add</option>
+                    <option value="Engine parts">Engine Parts</option>
+                    <option value="Transmission parts">Transmission Parts</option>
+                    <option value="Suspension and Steering parts">Suspension and Steering Parts</option>
+                    <option value="Brake parts">Brake Parts</option>
+                    <option value="Electrical parts">Electrical Parts</option>
+                    <option value="Exhaust system parts">Exhaust System Parts</option>
+                    <option value="Cooling system parts">Cooling System Parts</option>
+                    <option value="Fuel system parts">Fuel System Parts</option>
+                    <option value="Body parts">Body Parts</option>
+                    <option value="Interior parts">Interior Parts</option>
+                    <option value="Performance parts">Performance Parts</option>
+                    <option value="Maintenance parts and Service parts">Maintenance Parts and Service Parts</option>
+                </select> 
+                <br>
+                <select id="locationSelection" name="location" required>
+                    <option value="" selected disabled hidden>Select location</option>
+                    <option value="Warehouse">Warehouse</option>
+                    <option value="Garage">Garage</option>
+                </select>
+                <br>
+                <select id="selectWarehouse" name="warehouse_id" style="display: none;"></select>
+                <select id="selectGarage" name="garage_id" style="display: none;"></select>
+                <br>
+                <input type="number" name="quantity" placeholder="Enter the quantity" required> <br>
+                <input type="text" name="price" placeholder="Enter the price" required> <br>
+                <input type="text" name="supplier" placeholder="Enter the supplier" required> <br>
+                <button type="submit" name="submit">Add stock</button>
+            </form>
         </main>
     </div>
     <footer>
 
     </footer>
-    
+
+    <script>
+        document.getElementById("stockSelection").addEventListener("change", function() {
+            var selectedPart = this.value;
+            if(selectedPart !== "") {
+                console.log("Selected part " + selectedPart);
+            }
+        });
+
+        var locationSelection = document.getElementById("locationSelection");
+        var warehouseSelect = document.getElementById("selectWarehouse");
+        var garageSelection = document.getElementById("selectGarage");
+
+        locationSelection.addEventListener("change", function() {
+            var selectedLocation = this.value;
+            if(selectedLocation === "Garage") {
+                showGarageList();
+            } else if(selectedLocation === "Warehouse") {
+                showWarehouseList();
+            } else {
+                hideAllLists();
+            }
+        });
+
+        function showGarageList() {
+            hideAllLists();
+            garageSelection.style.display = "block";
+            garageSelection.innerHTML = `
+                <option value=
+            `;
+        }
+    </script>
 </body>
+
 </html>

@@ -5,9 +5,10 @@ const bcrypt = require("bcrypt"); // import module for password hashing
 
 // some important constants
 const salt = 10;
+const userID = null;
 
 // table names and database name
-const dbName = "mavwu_retail_db";
+const dbName = "mavwu_retail.db";
 const user = "users";
 const manager = "manager";
 const customer = "customer";
@@ -24,7 +25,7 @@ const app = express();
 const PORT = 3000;
 app.use(express.static("public"));  // serve static files from public directory
 app.use(bodyParser.json());  // parse JSON bodies
-app.use(bodyParser.urlencoded({ extended: true}));  // parse URL-encoded bodies
+app.use(bodyParser.urlencoded({ extended: true }));  // parse URL-encoded bodies
 
 // port setup for server to listen on
 app.listen(PORT, () => {
@@ -61,13 +62,31 @@ function createGarageTable() {
     db.run(`
         CREATE TABLE IF NOT EXISTS ${garage} (
             garage_id INTEGER PRIMARY KEY AUTOINCREMENT,
-            garage_name TEXT NOT NULL,
-            garage_address TEXT NOT NULL
+            garage_name TEXT NOT NULL UNIQUE,
+            street_address TEXT NOT NULL UNIQUE,
+            city TEXT NOT NULL UNIQUE,
+            province TEXT NOT NULL UNIQUE,
+            country TEXT NOT NULL
         );`, async (err) => {
         if (err) {
             console.error("Failed to create Garage Table:", err);
         } else {
             console.log("Successfully created Garage table");
+
+            db.run(`INSERT OR IGNORE INTO ${garage} (garage_name, street_address, city, province, country)
+                    VALUES ('Alpha Garage', '123 Main Street', 'Cityville', 'Province A', 'Country X');`);
+
+            db.run(`INSERT OR IGNORE INTO ${garage} (garage_name, street_address, city, province, country)
+                    VALUES ('Beta Garage', '456 Elm Street', 'Townsville', 'Province B', 'Country Y');`);
+
+            db.run(`INSERT OR IGNORE INTO ${garage} (garage_name, street_address, city, province, country)
+                    VALUES ('Gamma Garage', '789 Oak Street', 'Villagetown', 'Province C', 'Country Z');`);
+
+            db.run(`INSERT OR IGNORE INTO ${garage} (garage_name, street_address, city, province, country)
+                    VALUES ('Delta Garage', '321 Pine Street', 'Hamletville', 'Province D', 'Country X');`);
+
+            db.run(`INSERT OR IGNORE INTO ${garage} (garage_name, street_address, city, province, country)
+                    VALUES ('Epsilon Garage', '654 Cedar Street', 'Countryside', 'Province E', 'Country Y');`);
         }
     }
     );
@@ -188,16 +207,55 @@ function createUsersTable() {
     db.run(`
         CREATE TABLE IF NOT EXISTS ${user} (
             user_id INTEGER PRIMARY KEY AUTOINCREMENT,
+            username TEXT NOT NULL,
             email TEXT NOT NULL,
             phone INTEGER NOT NULL,
             first_name TEXT NOT NULL,
             last_name TEXT NOT NULL,
-            password TEXT NOT NULL
+            password TEXT NOT NULL,
+            admin BOOLEAN DEFAULT FALSE
         );`, async (err) => {
         if (err) {
             console.error("Failed to create Users Table:", err);
         } else {
             console.log("Successfully created Users Table");
+
+            // check if admin exists
+            const adminExists = await new Promise((resolve) => {
+                db.get(`SELECT * FROM ${user} WHERE admin = TRUE`, (err, row) => {
+                    if(err) {
+                        console.error("Failed to retrieve admin info", err);
+                    } else {
+                        console.log("Successfully retrieved admin info");
+                        resolve(row);
+                    }
+                })
+            });
+
+            // if no then create admin profile
+            if(!adminExists) {
+                // create admin user profile
+                const username = "mavwu";
+                const email = "mavwu@retail.mav";
+                const pass = "mavwu1234";
+                const phone = "0987654321";
+                const fName = "Alfred";
+                const lName = "Mavwu";
+
+                const hashPass = await bcrypt.hash(pass, salt);  // has admin pass
+            
+                db.run(`INSERT OR IGNORE INTO ${user} (username, email, phone, first_name, last_name, password, admin)
+                        VALUES (?, ?, ?, ?, ?, ?, ?)`, [username, email, phone, fName, lName, hashPass, true], (err) => {
+                            if(err) {
+                                console.error("There was an error adding Admin to Users Table:", err);
+                            } else {
+                                console.log("Admin was successfully added to Users Table");
+                            }
+                        });
+            // if yes then skip 
+            } else {
+                console.log("Admin user exists Admin Creation Skipped...");
+            }
         }
     }
     );
@@ -227,17 +285,22 @@ function createStockTable() {
     db.run(`
         CREATE TABLE IF NOT EXISTS ${stock} (
             stock_id INTEGER PRIMARY KEY AUTOINCREMENT,
-            part_id INTEGER NOT NULL,
+            stock_name TEXT NOT NULL,
             quantity INTEGER NOT NULL,
+            location TEXT NOT NULL,
+            garage_id INTEGER,
+            warehouse_id INTEGER,
             last_updated DATETIME DEFAULT CURRENT_TIMESTAMP,
-            FOREIGN KEY (part_id) REFERENCES part(part_id)
+            FOREIGN KEY (part_id) REFERENCES part(part_id),
+            FOREIGN KEY (garage_id) REFERENCES garage(garage_id),
+            FOREIGN KEY (warehouse_id) REFERENCES warehouse(warehouse_id)
         );`, async (err) => {
-            if(err) {
-                console.error("Failed to create Stock Table:", err);
-            } else {
-                console.log("Successfully created Stock Table");
-            }
+        if (err) {
+            console.error("Failed to create Stock Table:", err);
+        } else {
+            console.log("Successfully created Stock Table");
         }
+    }
     );
 }
 
@@ -248,7 +311,7 @@ app.post("/userRegistration", async (req, res) => {
     try {
         // check if password is at least 8 characters 
 
-        
+
         // check if user exists in system
         const userExist = await new Promise((resolve) => {
             db.get(`SELECT * FROM ${user}
@@ -264,7 +327,7 @@ app.post("/userRegistration", async (req, res) => {
             const hashPassword = await bcrypt.hash(password, salt);
 
             // insert a user to the database
-            db.run(`INSERT INTO ${user} (email, phone, first_name, last_name, password)
+            db.run(`INSERT OR IGNORE INTO ${user} (email, phone, first_name, last_name, password)
                     VALUES (?, ?, ?, ?, ?)`, [email, phone, first_name, last_name, hashPassword], (err) => {
                 if (err) {
                     console.error("There was an error during registration:", err);
@@ -283,25 +346,25 @@ app.post("/userRegistration", async (req, res) => {
 
 // login route *************************************************************
 app.post("/submitLoginDetails", async (req, res) => {
-    const {email, password} = req.body;
+    const { email, password } = req.body;
 
     try {
         // checking if email exists in database
         const userExist = await new Promise((resolve) => {
             db.get(`SELECT * FROM ${user}
                     WHERE email = ?`, [email], (err, row) => {
-                        resolve(row);
-                    });
+                resolve(row);
+            });
         });
 
         console.log("User Exist:", userExist);
 
         // if user is not found in database
-        if(!userExist) {
+        if (!userExist) {
             console.log("User not found");
             return res.status(401).send("Invalid email or password!")
-        } 
-        
+        }
+
         // if user is found in database
         else {
             let enteredPassHash = await bcrypt.hash(password, salt);
@@ -309,7 +372,7 @@ app.post("/submitLoginDetails", async (req, res) => {
             // compare if password entered is the same as password in database
             const passValidation = bcrypt.compare(password, userExist.password);
 
-            if(passValidation) {
+            if (passValidation) {
                 console.log("Successful login!");
                 res.redirect(`/dashboard/dashboard.html`);  // redirect to dashboard
             } else {
@@ -321,4 +384,9 @@ app.post("/submitLoginDetails", async (req, res) => {
     } catch (err) {
         console.error("An error occurred during login:", err);
     }
+});
+
+// add stock route ******************************************************
+app.post("addStock", async (req, res) => {
+    const {stock_name, location, warehouse_id, garage_id, price, } = req.body;
 });
