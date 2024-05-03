@@ -17,6 +17,7 @@ const staff = "staff";
 const warehouse = "warehouse";
 const garage = "garage";
 const dispatch = "dispatches";
+const stock = "stock";
 
 // create express app
 const app = express();
@@ -52,6 +53,7 @@ function createDatabase() {
     createManagerTable();
     createUsersTable();
     createDispatchesTable();
+    createStockTable();
 }
 
 // create garage table
@@ -65,7 +67,7 @@ function createGarageTable() {
         if (err) {
             console.error("Failed to create Garage Table:", err);
         } else {
-            console.log("Successfully created garage table");
+            console.log("Successfully created Garage table");
         }
     }
     );
@@ -88,7 +90,7 @@ function createWarehouseTable() {
         if (err) {
             console.error("Failed to create Warehouse Table:", err);
         } else {
-            console.log("Successfully created warehouse table");
+            console.log("Successfully created Warehouse table");
         }
     }
     );
@@ -105,7 +107,7 @@ function createStaffTable() {
         if (err) {
             console.error("Failed to create Staff Table:", err);
         } else {
-            console.log("Successfully created staff table");
+            console.log("Successfully created Staff table");
         }
     }
     );
@@ -122,7 +124,7 @@ function createPartsTable() {
         if (err) {
             console.error("Failed to create Parts Table:", err);
         } else {
-            console.log("Successfully created parts table");
+            console.log("Successfully created Parts table");
         }
     }
     );
@@ -140,7 +142,7 @@ function createOrderTable() {
         if (err) {
             console.error("Failed to create Order Table");
         } else {
-            console.log("Successfully created order table");
+            console.log("Successfully created Order table");
         }
     }
     );
@@ -174,7 +176,7 @@ function createManagerTable() {
             manager_phone INTEGER NOT NULL
         );`, async (err) => {
         if (err) {
-            console.error("Failed to create Users Table");
+            console.error("Failed to create Manager Table");
         } else {
             console.log("Successfully created Manager Table");
         }
@@ -221,6 +223,24 @@ function createDispatchesTable() {
     );
 }
 
+function createStockTable() {
+    db.run(`
+        CREATE TABLE IF NOT EXISTS ${stock} (
+            stock_id INTEGER PRIMARY KEY AUTOINCREMENT,
+            part_id INTEGER NOT NULL,
+            quantity INTEGER NOT NULL,
+            last_updated DATETIME DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (part_id) REFERENCES part(part_id)
+        );`, async (err) => {
+            if(err) {
+                console.error("Failed to create Stock Table:", err);
+            } else {
+                console.log("Successfully created Stock Table");
+            }
+        }
+    );
+}
+
 // sign up route **********************************************
 app.post("/userRegistration", async (req, res) => {
     const { first_name, last_name, email, phone, password } = req.body;
@@ -257,7 +277,6 @@ app.post("/userRegistration", async (req, res) => {
         }
     } catch (err) {
         console.error("There was an error during registration:", err);
-     
         res.status(400).send("Bad Request");
     }
 });

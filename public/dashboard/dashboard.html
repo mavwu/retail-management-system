@@ -1,20 +1,94 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Welcome to the Mavwu Retail Website</title>
 
     <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Candal|Lora">
+    <script src="https://kit.fontawesome.com/09e2129185.js" crossorigin="anonymous"></script>
+
+    <style>
+        header {
+            background: rgb(5, 5, 154);
+            border: white 2px solid;
+            color: white;
+            border-radius: 10px;
+            height: 70px;
+            padding: 5px;
+        }
+
+        .heading-container {
+            font-family: Candal;
+        }
+
+        h2 {
+            color: white;
+        }
+
+        .buttons-container {
+            border: solid black 1px;
+            width: 100%;
+            padding: 10px;
+            margin: 0;
+
+        }
+
+        .buttons-container button {
+            width: 80%;
+            height: 50px;
+            background: blue;
+            border-radius: 10px;
+            border: 1px white solid;
+            transition: all .9s;
+            color: white;
+        }
+
+        .buttons-container button:hover {
+            background: rgb(56, 56, 156);
+            transition: all .9;
+        }
+
+        .buttons-container a {
+            text-decoration: none;
+            color: white;
+        }
+
+
+        .page-wrapper {
+            border: 2px black solid;
+        }
+
+        .page-wrapper {
+            align-items: center;
+        }
+    </style>
 </head>
-<body>
+
+<body style="background-image: url('../images/background.jpg');">
     <header>
-        
+        <div class="heading-container">
+            <h1>Mavwu's Retail</h1>
+        </div>
     </header>
+
+    <div class="page-wrapper">
+        <main>
+            <div class="buttons-container">
+                <button><a href="../others/addstock.html">Add Stock</a></button> <br>
+                <button><a href="../others/viewstock.html">View Available Stock</a></button>
+                <button><a href="../others/editstock.html">Edit Available Stock</a></button>
+                <button><a href=""></a></button>
+            </div>
+        </main>
+    </div>
     <footer>
 
     </footer>
-    
-    
+
+
 </body>
+
 </html>
