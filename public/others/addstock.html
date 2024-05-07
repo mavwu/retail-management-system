@@ -28,21 +28,27 @@
                     <option value="Interior parts">Interior Parts</option>
                     <option value="Performance parts">Performance Parts</option>
                     <option value="Maintenance parts and Service parts">Maintenance Parts and Service Parts</option>
-                </select> 
+                </select>
                 <br>
-                <select id="locationSelection" name="location" required>
+                <select id="locationSelection" name="location" required onchange="showHiddenFields()">
                     <option value="" selected disabled hidden>Select location</option>
                     <option value="Warehouse">Warehouse</option>
                     <option value="Garage">Garage</option>
                 </select>
                 <br>
-                <select id="selectWarehouse" name="warehouse_id" style="display: none;"></select>
-                <select id="selectGarage" name="garage_id" style="display: none;"></select>
+                <select id="selectWarehouse" name="warehouse_id" style="display: none;" required></select>
+                <select id="selectGarage" name="garage_id" style="display: none;" required></select>
+
+                <div id="warehouseFields" style="display: none;">
+                    <label for="nationalPrice">National Price:</label>
+                    <input type="number" id="nationalPrice" name="price">
+
+                    <label for="nationalDiscount">National Discount:</label>
+                    <input type="number" id="nationalDiscount" name="discount">
+                </div>
+
                 <br>
-                <input type="number" name="quantity" placeholder="Enter the quantity" required> <br>
-                <input type="text" name="price" placeholder="Enter the price" required> <br>
-                <input type="text" name="supplier" placeholder="Enter the supplier" required> <br>
-                <button type="submit" name="submit">Add stock</button>
+                <input type="submit" value="Add Stock">
             </form>
         </main>
     </div>
@@ -51,9 +57,9 @@
     </footer>
 
     <script>
-        document.getElementById("stockSelection").addEventListener("change", function() {
+        document.getElementById("stockSelection").addEventListener("change", function () {
             var selectedPart = this.value;
-            if(selectedPart !== "") {
+            if (selectedPart !== "") {
                 console.log("Selected part " + selectedPart);
             }
         });
@@ -62,43 +68,59 @@
         var warehouseSelection = document.getElementById("selectWarehouse");
         var garageSelection = document.getElementById("selectGarage");
 
-        locationSelection.addEventListener("change", function() {
+        locationSelection.addEventListener("change", function () {
             var selectedLocation = this.value;
-            if(selectedLocation === "Garage") {
+            if (selectedLocation === "Garage") {
                 showGarageList();
-            } else if(selectedLocation === "Warehouse") {
+            } else if (selectedLocation === "Warehouse") {
                 showWarehouseList();
             } else {
                 hideAllLists();
             }
         });
-
         function showGarageList() {
             hideAllLists();
             garageSelection.style.display = "block";
+            garageSelection.required = true; // Add required attribute
+            warehouseSelection.required = false; // Remove required attribute from warehouse selection
             garageSelection.innerHTML = `
-                <option value="" selected hidden disabled>Select a Garage</option>
-                <option value="1">Alpha Mav</option>
-                <option value="2">Beta Mav</option>
-                <option value="3">Gamma Mav</option>
-                <option value="4">Delta Mav</option>
-                <option value="5">Epsilon Mav</option>
-            `;
+        <option value="" selected hidden disabled>Select a Garage</option>
+        <option value="1">Alpha Mav</option>
+        <option value="2">Beta Mav</option>
+        <option value="3">Gamma Mav</option>
+        <option value="4">Delta Mav</option>
+        <option value="5">Epsilon Mav</option>
+    `;
         }
 
         function showWarehouseList() {
             hideAllLists();
             warehouseSelection.style.display = "block";
+            warehouseSelection.required = true; // Add required attribute
+            garageSelection.required = false; // Remove required attribute from garage selection
             warehouseSelection.innerHTML = `
-                <option value="" selected hidden disabled>Select a Warehouse</option>
-                <option value="1">Auto Parts Central</option>
-                <option value="2">National Auto Supplies</option>
-            `;
+        <option value="" selected hidden disabled>Select a Warehouse</option>
+        <option value="1">Auto Parts Central</option>
+        <option value="2">National Auto Supplies</option>
+    `;
         }
+
 
         function hideAllLists() {
             garageSelection.style.display = "none";
             warehouseSelection.style.display = "none";
+        }
+
+        function showHiddenFields() {
+            var locationSelection = document.getElementById("locationSelection");
+            var warehouseFields = document.getElementById("warehouseFields");
+
+            // Check if the selected location is Warehouse
+            if (locationSelection.value === "Warehouse") {
+                warehouseFields.style.display = "block"; // Show the warehouse fields
+            } else {
+                warehouseFields.style.display = "none"; // Hide the warehouse fields
+            }
         }
     </script>
 </body>

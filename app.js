@@ -358,15 +358,12 @@ function createStockTable() {
         CREATE TABLE IF NOT EXISTS ${stock} (
             stock_id INTEGER PRIMARY KEY AUTOINCREMENT,
             stock_name TEXT NOT NULL,
-            quantity INTEGER NOT NULL,
-            location TEXT NOT NULL,
-            national_price DECIMAL NOT NULL,
-            national_discount DECIMAL NOT NULL,
+            location TEXT,
+            national_price DECIMAL,
+            national_discount DECIMAL,
             garage_id INTEGER,
             warehouse_id INTEGER,
-            part_id INTEGER,
             last_updated DATETIME DEFAULT CURRENT_TIMESTAMP,
-            FOREIGN KEY (part_id) REFERENCES parts(part_id),
             FOREIGN KEY (garage_id) REFERENCES garage(garage_id),
             FOREIGN KEY (warehouse_id) REFERENCES warehouse(warehouse_id)
         );`, async (err) => {
@@ -462,6 +459,23 @@ app.post("/submitLoginDetails", async (req, res) => {
 });
 
 // add stock route ******************************************************
-app.post("addStock", async (req, res) => {
-    const { stock_name, location, warehouse_id, garage_id, price, } = req.body;
+app.post("/addStock", async (req, res) => {
+    try {
+        const { stock_name, location, warehouse_id, garage_id, price, discount } = req.body;
+        console.log(req.body);
+
+        db.run(`INSERT INTO ${stock} (stock_name, location, national_price, national_discount, garage_id, warehouse_id)
+                VALUES (?, ?, ?, ?, ?, ?)`, [stock_name, location, price, discount, garage_id, warehouse_id], (err) => {
+                    if(err) {
+                        console.error("Failed to add Stock to database:", err);
+                        res.status(500).send("Internal Server Error");
+                    } else {
+                        console.log("Successfully added Stock to database");
+                        res.redirect(`/dashboard/dashboard.html`);
+                    }
+                })
+    } catch (error) {
+        console.error("Error in addStock request:", error);
+        res.status(400).send("Bad Request");
+    }
 });
