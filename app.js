@@ -99,8 +99,8 @@ function createWarehouseTable() {
             warehouse_id INTEGER PRIMARY KEY AUTOINCREMENT,
             warehouse_name TEXT NOT NULL,
             warehouse_address TEXT NOT NULL,
-            national_price NUMERIC,
-            national_discount NUMERIC,
+            national_price DECIMAL,
+            national_discount DECIMAL,
             dispatch_id INTEGER,
             garage_id INTEGER,
             FOREIGN KEY (dispatch_id) REFERENCES dispatches(dispatch_id),
@@ -137,14 +137,78 @@ function createPartsTable() {
     db.run(`
         CREATE TABLE IF NOT EXISTS ${parts} (
             part_id INTEGER PRIMARY KEY AUTOINCREMENT,
-            part_name TEXT NOT NULL,
-            part_price INTEGER NOT NULL
+            part_name TEXT NOT NULL UNIQUE,
+            part_price DECIMAL NOT NULL,
+            stock_id INTEGER NOT NULL,
+            FOREIGN KEY (stock_id) REFERENCES ${stock} (stock_id)
         );`, async (err) => {
-        if (err) {
+            if (err) {
             console.error("Failed to create Parts Table:", err);
         } else {
             console.log("Successfully created Parts table");
-        }
+
+            // add parts to part table
+            db.run(`INSERT OR IGNORE INTO ${parts} (part_name, part_price, stock_id) VALUES ('Piston', 100.00, 1);`);
+            db.run(`INSERT OR IGNORE INTO ${parts} (part_name, part_price, stock_id) VALUES ('Crankshaft', 100.00, 1);`);
+            db.run(`INSERT OR IGNORE INTO ${parts} (part_name, part_price, stock_id) VALUES ('Camshaft', 100.00, 1);`);
+            db.run(`INSERT OR IGNORE INTO ${parts} (part_name, part_price, stock_id) VALUES ('Cylinder head', 100.00, 1);`);
+            db.run(`INSERT OR IGNORE INTO ${parts} (part_name, part_price, stock_id) VALUES ('Timing belt', 100.00, 1);`);
+            db.run(`INSERT OR IGNORE INTO ${parts} (part_name, part_price, stock_id) VALUES ('Clutch kit', 200.00, 2);`);
+            db.run(`INSERT OR IGNORE INTO ${parts} (part_name, part_price, stock_id) VALUES ('Gearbox', 200.00, 2);`);
+            db.run(`INSERT OR IGNORE INTO ${parts} (part_name, part_price, stock_id) VALUES ('Transmission fluid', 200.00, 2);`);
+            db.run(`INSERT OR IGNORE INTO ${parts} (part_name, part_price, stock_id) VALUES ('Torque converter', 200.00, 2);`);
+            db.run(`INSERT OR IGNORE INTO ${parts} (part_name, part_price, stock_id) VALUES ('Shift solenoid', 200.00, 2);`);
+            db.run(`INSERT OR IGNORE INTO ${parts} (part_name, part_price, stock_id) VALUES ('Shock absorbers', 300.00, 3);`);
+            db.run(`INSERT OR IGNORE INTO ${parts} (part_name, part_price, stock_id) VALUES ('Control arms', 300.00, 3);`);
+            db.run(`INSERT OR IGNORE INTO ${parts} (part_name, part_price, stock_id) VALUES ('Tie rods', 300.00, 3);`);
+            db.run(`INSERT OR IGNORE INTO ${parts} (part_name, part_price, stock_id) VALUES ('Steering rack', 300.00, 3);`);
+            db.run(`INSERT OR IGNORE INTO ${parts} (part_name, part_price, stock_id) VALUES ('Sway bar', 300.00, 3);`);
+            db.run(`INSERT OR IGNORE INTO ${parts} (part_name, part_price, stock_id) VALUES ('Brake pads', 400.00, 4);`);
+            db.run(`INSERT OR IGNORE INTO ${parts} (part_name, part_price, stock_id) VALUES ('Brake rotors', 400.00, 4);`);
+            db.run(`INSERT OR IGNORE INTO ${parts} (part_name, part_price, stock_id) VALUES ('Brake calipers', 400.00, 4);`);
+            db.run(`INSERT OR IGNORE INTO ${parts} (part_name, part_price, stock_id) VALUES ('Brake lines', 400.00, 4);`);
+            db.run(`INSERT OR IGNORE INTO ${parts} (part_name, part_price, stock_id) VALUES ('Brake master cylinder', 400.00, 4);`);
+            db.run(`INSERT OR IGNORE INTO ${parts} (part_name, part_price, stock_id) VALUES ('Alternator', 500.00, 5);`);
+            db.run(`INSERT OR IGNORE INTO ${parts} (part_name, part_price, stock_id) VALUES ('Starter motor', 500.00, 5);`);
+            db.run(`INSERT OR IGNORE INTO ${parts} (part_name, part_price, stock_id) VALUES ('Battery', 500.00, 5);`);
+            db.run(`INSERT OR IGNORE INTO ${parts} (part_name, part_price, stock_id) VALUES ('Ignition coil', 500.00, 5);`);
+            db.run(`INSERT OR IGNORE INTO ${parts} (part_name, part_price, stock_id) VALUES ('Spark plugs', 500.00, 5);`);
+            db.run(`INSERT OR IGNORE INTO ${parts} (part_name, part_price, stock_id) VALUES ('Exhaust manifold', 600.00, 6);`);
+            db.run(`INSERT OR IGNORE INTO ${parts} (part_name, part_price, stock_id) VALUES ('Catalytic converter', 600.00, 6);`);
+            db.run(`INSERT OR IGNORE INTO ${parts} (part_name, part_price, stock_id) VALUES ('Muffler', 600.00, 6);`);
+            db.run(`INSERT OR IGNORE INTO ${parts} (part_name, part_price, stock_id) VALUES ('Exhaust pipe', 600.00, 6);`);
+            db.run(`INSERT OR IGNORE INTO ${parts} (part_name, part_price, stock_id) VALUES ('Oxygen sensor', 600.00, 6);`);
+            db.run(`INSERT OR IGNORE INTO ${parts} (part_name, part_price, stock_id) VALUES ('Radiator', 700.00, 7);`);
+            db.run(`INSERT OR IGNORE INTO ${parts} (part_name, part_price, stock_id) VALUES ('Water pump', 700.00, 7);`);
+            db.run(`INSERT OR IGNORE INTO ${parts} (part_name, part_price, stock_id) VALUES ('Thermostat', 700.00, 7);`);
+            db.run(`INSERT OR IGNORE INTO ${parts} (part_name, part_price, stock_id) VALUES ('Cooling fan', 700.00, 7);`);
+            db.run(`INSERT OR IGNORE INTO ${parts} (part_name, part_price, stock_id) VALUES ('Radiator hose', 700.00, 7);`);
+            db.run(`INSERT OR IGNORE INTO ${parts} (part_name, part_price, stock_id) VALUES ('Fuel pump', 800.00, 8);`);
+            db.run(`INSERT OR IGNORE INTO ${parts} (part_name, part_price, stock_id) VALUES ('Fuel injector', 800.00, 8);`);
+            db.run(`INSERT OR IGNORE INTO ${parts} (part_name, part_price, stock_id) VALUES ('Fuel filter', 800.00, 8);`);
+            db.run(`INSERT OR IGNORE INTO ${parts} (part_name, part_price, stock_id) VALUES ('Fuel pressure regulator', 800.00, 8);`);
+            db.run(`INSERT OR IGNORE INTO ${parts} (part_name, part_price, stock_id) VALUES ('Fuel tank', 800.00, 8);`);
+            db.run(`INSERT OR IGNORE INTO ${parts} (part_name, part_price, stock_id) VALUES ('Bumper', 900.00, 9);`);
+            db.run(`INSERT OR IGNORE INTO ${parts} (part_name, part_price, stock_id) VALUES ('Fender', 900.00, 9);`);
+            db.run(`INSERT OR IGNORE INTO ${parts} (part_name, part_price, stock_id) VALUES ('Hood', 900.00, 9);`);
+            db.run(`INSERT OR IGNORE INTO ${parts} (part_name, part_price, stock_id) VALUES ('Door panel', 900.00, 9);`);
+            db.run(`INSERT OR IGNORE INTO ${parts} (part_name, part_price, stock_id) VALUES ('Quarter panel', 900.00, 9);`);
+            db.run(`INSERT OR IGNORE INTO ${parts} (part_name, part_price, stock_id) VALUES ('Dashboard', 1000.00, 10);`);
+            db.run(`INSERT OR IGNORE INTO ${parts} (part_name, part_price, stock_id) VALUES ('Seats', 1000.00, 10);`);
+            db.run(`INSERT OR IGNORE INTO ${parts} (part_name, part_price, stock_id) VALUES ('Carpet', 1000.00, 10);`);
+            db.run(`INSERT OR IGNORE INTO ${parts} (part_name, part_price, stock_id) VALUES ('Door trim', 1000.00, 10);`);
+            db.run(`INSERT OR IGNORE INTO ${parts} (part_name, part_price, stock_id) VALUES ('Headliner', 1000.00, 10);`);
+            db.run(`INSERT OR IGNORE INTO ${parts} (part_name, part_price, stock_id) VALUES ('Turbocharger', 1100.00, 11);`);
+            db.run(`INSERT OR IGNORE INTO ${parts} (part_name, part_price, stock_id) VALUES ('Supercharger', 1100.00, 11);`);
+            db.run(`INSERT OR IGNORE INTO ${parts} (part_name, part_price, stock_id) VALUES ('Cold air intake', 1100.00, 11);`);
+            db.run(`INSERT OR IGNORE INTO ${parts} (part_name, part_price, stock_id) VALUES ('Performance exhaust system', 1100.00, 11);`);
+            db.run(`INSERT OR IGNORE INTO ${parts} (part_name, part_price, stock_id) VALUES ('Performance camshaft', 1100.00, 11);`);
+            db.run(`INSERT OR IGNORE INTO ${parts} (part_name, part_price, stock_id) VALUES ('Oil filter', 1100.00, 12);`);
+            db.run(`INSERT OR IGNORE INTO ${parts} (part_name, part_price, stock_id) VALUES ('Air filter', 1100.00, 12);`);
+            db.run(`INSERT OR IGNORE INTO ${parts} (part_name, part_price, stock_id) VALUES ('Cabin air filter', 1100.00, 12);`);
+            db.run(`INSERT OR IGNORE INTO ${parts} (part_name, part_price, stock_id) VALUES ('Serpentine belt', 1100.00, 12);`);
+            db.run(`INSERT OR IGNORE INTO ${parts} (part_name, part_price, stock_id) VALUES ('Timing belt kit', 1100.00, 12);`);
+                    }
     }
     );
 }
@@ -223,7 +287,7 @@ function createUsersTable() {
             // check if admin exists
             const adminExists = await new Promise((resolve) => {
                 db.get(`SELECT * FROM ${user} WHERE admin = TRUE`, (err, row) => {
-                    if(err) {
+                    if (err) {
                         console.error("Failed to retrieve admin info", err);
                     } else {
                         console.log("Successfully retrieved admin info");
@@ -233,7 +297,7 @@ function createUsersTable() {
             });
 
             // if no then create admin profile
-            if(!adminExists) {
+            if (!adminExists) {
                 // create admin user profile
                 const username = "mavwu";
                 const email = "mavwu@retail.mav";
@@ -243,16 +307,16 @@ function createUsersTable() {
                 const lName = "Mavwu";
 
                 const hashPass = await bcrypt.hash(pass, salt);  // has admin pass
-            
+
                 db.run(`INSERT OR IGNORE INTO ${user} (username, email, phone, first_name, last_name, password, admin)
                         VALUES (?, ?, ?, ?, ?, ?, ?)`, [username, email, phone, fName, lName, hashPass, true], (err) => {
-                            if(err) {
-                                console.error("There was an error adding Admin to Users Table:", err);
-                            } else {
-                                console.log("Admin was successfully added to Users Table");
-                            }
-                        });
-            // if yes then skip 
+                    if (err) {
+                        console.error("There was an error adding Admin to Users Table:", err);
+                    } else {
+                        console.log("Admin was successfully added to Users Table");
+                    }
+                });
+                // if yes then skip 
             } else {
                 console.log("Admin user exists Admin Creation Skipped...");
             }
@@ -291,7 +355,7 @@ function createStockTable() {
             garage_id INTEGER,
             warehouse_id INTEGER,
             last_updated DATETIME DEFAULT CURRENT_TIMESTAMP,
-            FOREIGN KEY (part_id) REFERENCES part(part_id),
+            FOREIGN KEY (part_id) REFERENCES parts(part_id),
             FOREIGN KEY (garage_id) REFERENCES garage(garage_id),
             FOREIGN KEY (warehouse_id) REFERENCES warehouse(warehouse_id)
         );`, async (err) => {
@@ -388,5 +452,5 @@ app.post("/submitLoginDetails", async (req, res) => {
 
 // add stock route ******************************************************
 app.post("addStock", async (req, res) => {
-    const {stock_name, location, warehouse_id, garage_id, price, } = req.body;
+    const { stock_name, location, warehouse_id, garage_id, price, } = req.body;
 });
