@@ -59,7 +59,7 @@
         });
 
         var locationSelection = document.getElementById("locationSelection");
-        var warehouseSelect = document.getElementById("selectWarehouse");
+        var warehouseSelection = document.getElementById("selectWarehouse");
         var garageSelection = document.getElementById("selectGarage");
 
         locationSelection.addEventListener("change", function() {
@@ -77,8 +77,28 @@
             hideAllLists();
             garageSelection.style.display = "block";
             garageSelection.innerHTML = `
-                <option value=
+                <option value="" selected hidden disabled>Select a Garage</option>
+                <option value="1">Alpha Mav</option>
+                <option value="2">Beta Mav</option>
+                <option value="3">Gamma Mav</option>
+                <option value="4">Delta Mav</option>
+                <option value="5">Epsilon Mav</option>
             `;
+        }
+
+        function showWarehouseList() {
+            hideAllLists();
+            warehouseSelection.style.display = "block";
+            warehouseSelection.innerHTML = `
+                <option value="" selected hidden disabled>Select a Warehouse</option>
+                <option value="1">Auto Parts Central</option>
+                <option value="2">National Auto Supplies</option>
+            `;
+        }
+
+        function hideAllLists() {
+            garageSelection.style.display = "none";
+            warehouseSelection.style.display = "none";
         }
     </script>
 </body>

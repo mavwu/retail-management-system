@@ -61,7 +61,7 @@ function createDatabase() {
 function createGarageTable() {
     db.run(`
         CREATE TABLE IF NOT EXISTS ${garage} (
-            garage_id INTEGER PRIMARY KEY AUTOINCREMENT,
+            garage_id INTEGER PRIMARY KEY,
             garage_name TEXT NOT NULL UNIQUE,
             street_address TEXT NOT NULL UNIQUE,
             city TEXT NOT NULL UNIQUE,
@@ -73,20 +73,20 @@ function createGarageTable() {
         } else {
             console.log("Successfully created Garage table");
 
-            db.run(`INSERT OR IGNORE INTO ${garage} (garage_name, street_address, city, province, country)
-                    VALUES ('Alpha Garage', '123 Main Street', 'Cityville', 'Province A', 'Country X');`);
+            db.run(`INSERT OR IGNORE INTO ${garage} (garage_id, garage_name, street_address, city, province, country)
+                    VALUES (1, 'Alpha Mav', '123 Main Street', 'Cityville', 'Province A', 'Country X');`);
 
-            db.run(`INSERT OR IGNORE INTO ${garage} (garage_name, street_address, city, province, country)
-                    VALUES ('Beta Garage', '456 Elm Street', 'Townsville', 'Province B', 'Country Y');`);
+            db.run(`INSERT OR IGNORE INTO ${garage} (garage_id, garage_name, street_address, city, province, country)
+                    VALUES (2, 'Beta Mav', '456 Elm Street', 'Townsville', 'Province B', 'Country Y');`);
 
-            db.run(`INSERT OR IGNORE INTO ${garage} (garage_name, street_address, city, province, country)
-                    VALUES ('Gamma Garage', '789 Oak Street', 'Villagetown', 'Province C', 'Country Z');`);
+            db.run(`INSERT OR IGNORE INTO ${garage} (garage_id,garage_name, street_address, city, province, country)
+                    VALUES (3, 'Gamma Mav', '789 Oak Street', 'Villagetown', 'Province C', 'Country Z');`);
 
-            db.run(`INSERT OR IGNORE INTO ${garage} (garage_name, street_address, city, province, country)
-                    VALUES ('Delta Garage', '321 Pine Street', 'Hamletville', 'Province D', 'Country X');`);
+            db.run(`INSERT OR IGNORE INTO ${garage} (garage_id, garage_name, street_address, city, province, country)
+                    VALUES (4, 'Delta Mav', '321 Pine Street', 'Hamletville', 'Province D', 'Country X');`);
 
-            db.run(`INSERT OR IGNORE INTO ${garage} (garage_name, street_address, city, province, country)
-                    VALUES ('Epsilon Garage', '654 Cedar Street', 'Countryside', 'Province E', 'Country Y');`);
+            db.run(`INSERT OR IGNORE INTO ${garage} (garage_id, garage_name, street_address, city, province, country)
+                    VALUES (5, 'Epsilon Mav', '654 Cedar Street', 'Countryside', 'Province E', 'Country Y');`);
         }
     }
     );
@@ -96,11 +96,12 @@ function createGarageTable() {
 function createWarehouseTable() {
     db.run(`
         CREATE TABLE IF NOT EXISTS ${warehouse} (
-            warehouse_id INTEGER PRIMARY KEY AUTOINCREMENT,
+            warehouse_id INTEGER PRIMARY KEY,
             warehouse_name TEXT NOT NULL,
-            warehouse_address TEXT NOT NULL,
-            national_price DECIMAL,
-            national_discount DECIMAL,
+            street_address TEXT NOT NULL,
+            city TEXT NOT NULL UNIQUE,
+            province TEXT NOT NULL,
+            country TEXT NOT NULL,
             dispatch_id INTEGER,
             garage_id INTEGER,
             FOREIGN KEY (dispatch_id) REFERENCES dispatches(dispatch_id),
@@ -110,6 +111,13 @@ function createWarehouseTable() {
             console.error("Failed to create Warehouse Table:", err);
         } else {
             console.log("Successfully created Warehouse table");
+
+            db.run(`INSERT OR IGNORE INTO ${warehouse} (warehouse_id, warehouse_name, street_address, city, province, country)
+                    VALUES(1, 'Auto Parts Central', '789 Main Street', 'Cityville', 'Stateville', 'Countryland');`);
+
+            db.run(`INSERT OR IGNORE INTO ${warehouse} (warehouse_id, warehouse_name, street_address, city, province, country)
+                    VALUES(2, 'National Auto Supplies', '456 Elm Avenue', 'Townsville', 'Statevill', 'Countryland');`);
+
         }
     }
     );
@@ -142,7 +150,7 @@ function createPartsTable() {
             stock_id INTEGER NOT NULL,
             FOREIGN KEY (stock_id) REFERENCES ${stock} (stock_id)
         );`, async (err) => {
-            if (err) {
+        if (err) {
             console.error("Failed to create Parts Table:", err);
         } else {
             console.log("Successfully created Parts table");
@@ -208,7 +216,7 @@ function createPartsTable() {
             db.run(`INSERT OR IGNORE INTO ${parts} (part_name, part_price, stock_id) VALUES ('Cabin air filter', 1100.00, 12);`);
             db.run(`INSERT OR IGNORE INTO ${parts} (part_name, part_price, stock_id) VALUES ('Serpentine belt', 1100.00, 12);`);
             db.run(`INSERT OR IGNORE INTO ${parts} (part_name, part_price, stock_id) VALUES ('Timing belt kit', 1100.00, 12);`);
-                    }
+        }
     }
     );
 }
@@ -352,8 +360,11 @@ function createStockTable() {
             stock_name TEXT NOT NULL,
             quantity INTEGER NOT NULL,
             location TEXT NOT NULL,
+            national_price DECIMAL NOT NULL,
+            national_discount DECIMAL NOT NULL,
             garage_id INTEGER,
             warehouse_id INTEGER,
+            part_id INTEGER,
             last_updated DATETIME DEFAULT CURRENT_TIMESTAMP,
             FOREIGN KEY (part_id) REFERENCES parts(part_id),
             FOREIGN KEY (garage_id) REFERENCES garage(garage_id),
