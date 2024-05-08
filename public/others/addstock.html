@@ -39,7 +39,7 @@
                 <select id="selectWarehouse" name="warehouse_id" style="display: none;" required></select>
                 <select id="selectGarage" name="garage_id" style="display: none;" required></select>
 
-                <div id="warehouseFields" style="display: none;">
+                <div id="amountFields" style="display: none;">
                     <label for="nationalPrice">National Price:</label>
                     <input type="number" id="nationalPrice" name="price">
 
@@ -113,13 +113,14 @@
 
         function showHiddenFields() {
             var locationSelection = document.getElementById("locationSelection");
-            var warehouseFields = document.getElementById("warehouseFields");
+            var amountFields = document.getElementById("amountFields");
+            
 
             // Check if the selected location is Warehouse
-            if (locationSelection.value === "Warehouse") {
-                warehouseFields.style.display = "block"; // Show the warehouse fields
+            if (locationSelection.value === "Warehouse" || locationSelection.value === "Garage") {
+                amountFields.style.display = "block"; // Show the warehouse fields
             } else {
-                warehouseFields.style.display = "none"; // Hide the warehouse fields
+                amountFields.style.display = "none";
             }
         }
     </script>

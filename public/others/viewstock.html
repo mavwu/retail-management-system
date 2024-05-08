@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Candal|Lora">
+    <script src="https://kit.fontawesome.com/09e2129185.js" crossorigin="anonymous"></script>
+    <title>Stock Available</title>
+</head>
+
+<style>
+    header {
+            background: rgb(5, 5, 154);
+            border: white 2px solid;
+            color: white;
+            border-radius: 10px;
+            height: 70px;
+            padding: 5px;
+        }
+
+        .heading-container {
+            font-family: Candal;
+        }
+
+        h2 {
+            color: white;
+        }
+
+        .buttons-container {
+            border: solid black 1px;
+            width: 100%;
+            padding: 10px;
+            margin: 0;
+            
+        }
+
+        .buttons-container button {
+            width: 80%;
+            height: 50px;
+            background: blue;
+            border-radius: 10px;
+            border: 1px white solid;
+            transition: all .9s;
+            color: white;
+        }
+
+        .login:hover, .signup:hover {
+            background: rgb(56, 56, 156);
+            transition: all .9;
+        }
+
+        .buttons-container a {
+            text-decoration: none;
+            color: white;
+        }
+        
+
+        .page-wrapper {
+            border: 2px black solid;
+        }
+</style>
+
+<body style="background-image: url('../images/background.jpg');">
+    <header>
+
+    </header>
+
+    <div class="page-wrapper">
+        <h1>Available Stock</h1>
+        <div id="stockList"></div>
+    </div>
+
+    <footer>
+
+    </footer>
+
+    <script>
+        fetch('/viewStock')
+            .then(response => response.json())
+            .then(data => {
+                const stockList = document.getElementById('stockList');
+                data.forEach(stock => {
+                    const stockItem = document.createElement('div');
+
+                    // is using price and discount and not the actual column names 
+                    // so in sql query backend ...AS price, ...AS discount was used
+                    stockItem.innerHTML = `
+                        <h3>${stock.stock_name}</h3>
+                        <p>Location: ${stock.location}</p>
+                        <p>Price: ${stock.price}</p>
+                        <p>Discount: ${stock.discount}</p>
+                    `;
+                    stockList.appendChild(stockItem);
+                });
+            })
+            .catch(error => console.error('Error fetching available stock:', error));
+    </script>
+</body>
+
+</html>

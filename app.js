@@ -479,3 +479,27 @@ app.post("/addStock", async (req, res) => {
         res.status(400).send("Bad Request");
     }
 });
+
+// view stock route *********************************************
+app.get("/viewStock", async (req, res) => {
+    try {
+        // query the database for available stock
+        const availableStock = await new Promise((resolve, reject) => {
+            db.all(`SELECT stock_name, location, national_price AS price, national_discount AS discount FROM ${stock}`, (err, rows) => {
+                if (err) {
+                    console.error('Error fetching available stock:', err);
+                    reject(err);
+                } else {
+                    resolve(rows);
+                }
+            });
+        });
+        
+        // send available stock info as a JSON response for the frontend
+        res.json(availableStock);
+
+    } catch (error) {
+        console.error('Error fetching available stock:', error);
+        res.status(500).json({ error: 'An error occurred while fetching available stock' });
+    }
+});
