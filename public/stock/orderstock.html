@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Candal|Lora">
+    <script src="https://kit.fontawesome.com/09e2129185.js" crossorigin="anonymous"></script>
+    <title>Order from Warehouse or Garage</title>
+</head>
+
+<style>
+    header {
+        background: rgb(5, 5, 154);
+        border: white 2px solid;
+        color: white;
+        border-radius: 10px;
+        height: 70px;
+        padding: 5px;
+    }
+
+    .heading-container {
+        font-family: Candal;
+    }
+
+    h2 {
+        color: white;
+    }
+
+    .buttons-container {
+        border: solid black 1px;
+        width: 100%;
+        padding: 10px;
+        margin: 0;
+
+    }
+
+    .buttons-container button {
+        width: 80%;
+        height: 50px;
+        background: blue;
+        border-radius: 10px;
+        border: 1px white solid;
+        transition: all .9s;
+        color: white;
+    }
+
+    .login:hover,
+    .signup:hover {
+        background: rgb(56, 56, 156);
+        transition: all .9;
+    }
+
+    .buttons-container a {
+        text-decoration: none;
+        color: white;
+    }
+
+
+    .page-wrapper {
+        border: 2px black solid;
+    }
+</style>
+
+<body>
+    <header>
+        <div class="heading-container">
+            <h1>Mavwu's Retail</h1>
+        </div>
+    </header>
+
+    <div class="page-wrapper">
+        <main>
+            <h3>Enter the Details of the Parts to be order</h3>
+
+            <form action="/orderStock" method="post">
+                <div class="orderDetails">
+                    <select id="stockSelection" name="stock_name" required>
+                        <option value="" disabled selected hidden>Select parts to order</option>
+                        <option value="Engine parts">Engine Parts</option>
+                        <option value="Transmission parts">Transmission Parts</option>
+                        <option value="Suspension and Steering parts">Suspension and Steering Parts</option>
+                        <option value="Brake parts">Brake Parts</option>
+                        <option value="Electrical parts">Electrical Parts</option>
+                        <option value="Exhaust system parts">Exhaust System Parts</option>
+                        <option value="Cooling system parts">Cooling System Parts</option>
+                        <option value="Fuel system parts">Fuel System Parts</option>
+                        <option value="Body parts">Body Parts</option>
+                        <option value="Interior parts">Interior Parts</option>
+                        <option value="Performance parts">Performance Parts</option>
+                        <option value="Maintenance parts and Service parts">Maintenance Parts and Service Parts</option>
+                    </select>
+                    <br>
+                    <select id="locationSelection" name="location" required onchange="showHiddenFields()">
+                        <option value="" selected disabled hidden>Select location</option>
+                        <option value="Warehouse">Warehouse</option>
+                        <option value="Garage">Garage</option>
+                    </select>
+                    <br>
+                    <select id="selectWarehouse" name="warehouse_id" style="display: none;" required></select>
+                    <select id="selectGarage" name="garage_id" style="display: none;" required></select>
+
+                    <input type="number" placeholder="Enter the quantity. max limit 25">
+
+                </div>
+                <input type="submit" value="Order Parts">
+            </form>
+        </main>
+    </div>
+
+    <footer>
+        <div class="footer-bottom">
+            &copy; 2024 Mavwu Retail | Designed by Alfred Mavwu
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById("stockSelection").addEventListener("change", function () {
+            var selectedPart = this.value;
+            if (selectedPart !== "") {
+                console.log("Selected part " + selectedPart);
+            }
+        });
+
+        var locationSelection = document.getElementById("locationSelection");
+        var warehouseSelection = document.getElementById("selectWarehouse");
+        var garageSelection = document.getElementById("selectGarage");
+
+        locationSelection.addEventListener("change", function () {
+            var selectedLocation = this.value;
+            if (selectedLocation === "Garage") {
+                showGarageList();
+            } else if (selectedLocation === "Warehouse") {
+                showWarehouseList();
+            } else {
+                hideAllLists();
+            }
+        });
+
+        function showGarageList() {
+            hideAllLists();
+            garageSelection.style.display = "block";
+            garageSelection.required = true; // Add required attribute
+            warehouseSelection.required = false; // Remove required attribute from warehouse selection
+            garageSelection.innerHTML = `
+        <option value="" selected hidden disabled>Select a Garage</option>
+        <option value="1">Alpha Mav</option>
+        <option value="2">Beta Mav</option>
+        <option value="3">Gamma Mav</option>
+        <option value="4">Delta Mav</option>
+        <option value="5">Epsilon Mav</option>
+    `;
+        }
+
+        function showWarehouseList() {
+            hideAllLists();
+            warehouseSelection.style.display = "block";
+            warehouseSelection.required = true; // Add required attribute
+            garageSelection.required = false; // Remove required attribute from garage selection
+            warehouseSelection.innerHTML = `
+        <option value="" selected hidden disabled>Select a Warehouse</option>
+        <option value="1">Auto Parts Central</option>
+        <option value="2">National Auto Supplies</option>
+    `;
+        }
+
+
+        function hideAllLists() {
+            garageSelection.style.display = "none";
+            warehouseSelection.style.display = "none";
+        }
+    </script>
+
+</body>
+
+</html>

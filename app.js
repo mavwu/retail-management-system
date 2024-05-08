@@ -129,7 +129,9 @@ function createStaffTable() {
         CREATE TABLE IF NOT EXISTS ${staff} (
             staff_id INTEGER PRIMARY KEY AUTOINCREMENT,
             staff_name TEXT NOT NULL,
-            staff_address TEXT NOT NULL
+            staff_address TEXT NOT NULL,
+            garage_id INTEGER NOT NULL,
+            FOREIGN KEY (garage_id) REFERENCES ${garage}(garage_id)
         );`, async (err) => {
         if (err) {
             console.error("Failed to create Staff Table:", err);
@@ -228,12 +230,15 @@ function createOrderTable() {
             order_id INTEGER PRIMARY KEY AUTOINCREMENT,
             order_date TEXT NOT NULL,
             order_status TEXT NOT NULL,
-            order_total INTEGER NOT NULL
+            destination_garage INTEGER,
+            destination_warehouse INTEGER,
+            FOREIGN KEY (destination_garage) REFERENCES ${garage}(garage_id),
+            FOREIGN KEY (destination_warehouse) REFERENCES ${warehouse}(warehouse_id)
         );`, async (err) => {
         if (err) {
-            console.error("Failed to create Order Table");
+            console.error("Failed to create Orders Table");
         } else {
-            console.log("Successfully created Order table");
+            console.log("Successfully created Orders table");
         }
     }
     );
@@ -341,11 +346,15 @@ function createDispatchesTable() {
             dispatch_date DATETIME,
             garage_id INTEGER,
             warehouse_id INTEGER,
-            FOREIGN KEY (garage_id) REFERENCES garage(garage_id),
-            FOREIGN KEY (warehouse_id) REFERENCES warehouse(warehouse_id)
+            stock_id INTEGER,
+            order_id INTEGER,
+            FOREIGN KEY (order_id) REFERENCES ${order},
+            FOREIGN KEY (garage_id) REFERENCES ${garage}(garage_id),
+            FOREIGN KEY (warehouse_id) REFERENCES ${warehouse}(warehouse_id),
+            FOREIGN KEY (stock_id) REFERENCES ${stock}(stock_id)
         );`, async (err) => {
         if (err) {
-            console.err("Failed to create Dispatches Table:", err);
+            console.error("Failed to create Dispatches Table:", err);
         } else {
             console.log("Successfully created Dispatches Table");
         }
@@ -364,8 +373,8 @@ function createStockTable() {
             garage_id INTEGER,
             warehouse_id INTEGER,
             last_updated DATETIME DEFAULT CURRENT_TIMESTAMP,
-            FOREIGN KEY (garage_id) REFERENCES garage(garage_id),
-            FOREIGN KEY (warehouse_id) REFERENCES warehouse(warehouse_id)
+            FOREIGN KEY (garage_id) REFERENCES ${garage}(garage_id),
+            FOREIGN KEY (warehouse_id) REFERENCES ${warehouse}(warehouse_id)
         );`, async (err) => {
         if (err) {
             console.error("Failed to create Stock Table:", err);
@@ -501,5 +510,17 @@ app.get("/viewStock", async (req, res) => {
     } catch (error) {
         console.error('Error fetching available stock:', error);
         res.status(500).json({ error: 'An error occurred while fetching available stock' });
+    }
+});
+
+// order stock route *********************************************************
+app.post("/orderStock", async (req, res) => {
+    try {
+        const {} = req.body;
+
+        // get garage id of origin using the staff
+
+    } catch (err) {
+
     }
 });
