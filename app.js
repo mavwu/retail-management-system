@@ -128,15 +128,88 @@ function createStaffTable() {
     db.run(`
         CREATE TABLE IF NOT EXISTS ${staff} (
             staff_id INTEGER PRIMARY KEY AUTOINCREMENT,
-            staff_name TEXT NOT NULL,
-            staff_address TEXT NOT NULL,
-            garage_id INTEGER NOT NULL,
-            FOREIGN KEY (garage_id) REFERENCES ${garage}(garage_id)
+            staff_name TEXT NOT NULL UNIQUE,
+            garage_id INTEGER,
+            warehouse_id INTEGER,
+            FOREIGN KEY (garage_id) REFERENCES ${garage}(garage_id),
+            FOREIGN KEY (warehouse_id) REFERENCES ${warehouse}(warehouse_id)
         );`, async (err) => {
         if (err) {
             console.error("Failed to create Staff Table:", err);
         } else {
             console.log("Successfully created Staff table");
+
+            // Garage staff
+            db.run(`INSERT OR IGNORE INTO staff (staff_name, garage_id, warehouse_id)
+                    VALUES ('John Doe', 1, NULL)`);
+
+            db.run(`INSERT OR IGNORE INTO staff (staff_name, garage_id, warehouse_id)
+                    VALUES ('Jane Smith', 1, NULL)`);
+
+            db.run(`INSERT OR IGNORE INTO staff (staff_name, garage_id, warehouse_id)
+                    VALUES ('Mike Johnson', 1, NULL)`);
+
+            db.run(`INSERT OR IGNORE INTO staff (staff_name, garage_id, warehouse_id)
+                    VALUES ('Robert Brown', 2, NULL)`);
+
+            db.run(`INSERT OR IGNORE INTO staff (staff_name, garage_id, warehouse_id)
+                    VALUES ('Emily Davis', 2, NULL)`);
+
+            db.run(`INSERT OR IGNORE INTO staff (staff_name, garage_id, warehouse_id)
+                    VALUES ('Sara Lee', 2, NULL)`);
+
+            db.run(`INSERT OR IGNORE INTO staff (staff_name, garage_id, warehouse_id)
+                    VALUES ('Chris Green', 3, NULL)`);
+
+            db.run(`INSERT OR IGNORE INTO staff (staff_name, garage_id, warehouse_id)
+                    VALUES ('Anna White', 3, NULL)`);
+
+            db.run(`INSERT OR IGNORE INTO staff (staff_name, garage_id, warehouse_id)
+                    VALUES ('David Clark', 3, NULL)`);
+
+            db.run(`INSERT OR IGNORE INTO staff (staff_name, garage_id, warehouse_id)
+                    VALUES ('Betty Brown', 4, NULL)`);
+
+            db.run(`INSERT OR IGNORE INTO staff (staff_name, garage_id, warehouse_id)
+                    VALUES ('Steve Adams', 4, NULL)`);
+
+            db.run(`INSERT OR IGNORE INTO staff (staff_name, garage_id, warehouse_id)
+                    VALUES ('Laura King', 4, NULL)`);
+
+            db.run(`INSERT OR IGNORE INTO staff (staff_name, garage_id, warehouse_id)
+                    VALUES ('Paul Harris', 5, NULL)`);
+
+            db.run(`INSERT OR IGNORE INTO staff (staff_name, garage_id, warehouse_id)
+                    VALUES ('Nancy Wright', 5, NULL)`);
+
+            db.run(`INSERT OR IGNORE INTO staff (staff_name, garage_id, warehouse_id)
+                    VALUES ('George Hall', 5, NULL)`);
+
+
+            // warehouse staff
+            db.run(`INSERT OR IGNORE INTO staff (staff_name, garage_id, warehouse_id)
+                    VALUES ('Megan Fox', NULL, 1)`);
+
+            db.run(`INSERT OR IGNORE INTO staff (staff_name, garage_id, warehouse_id)
+                    VALUES ('James Black', NULL, 1)`);
+
+            db.run(`INSERT OR IGNORE INTO staff (staff_name, garage_id, warehouse_id)
+                    VALUES ('Linda Green', NULL, 1)`);
+
+            db.run(`INSERT OR IGNORE INTO staff (staff_name, garage_id, warehouse_id)
+                    VALUES ('Tom White', NULL, 1)`);
+
+            db.run(`INSERT OR IGNORE INTO staff (staff_name, garage_id, warehouse_id)
+                    VALUES ('Alice Gray', NULL, 2)`);
+
+            db.run(`INSERT OR IGNORE INTO staff (staff_name, garage_id, warehouse_id)
+                    VALUES ('Mark Johnson', NULL, 2)`);
+
+            db.run(`INSERT OR IGNORE INTO staff (staff_name, garage_id, warehouse_id)
+                    VALUES ('Barbara Brown', NULL, 2)`);
+
+            db.run(`INSERT OR IGNORE INTO staff (staff_name, garage_id, warehouse_id)
+                    VALUES ('Sam Wilson', NULL, 2)`);
         }
     }
     );
@@ -475,14 +548,14 @@ app.post("/addStock", async (req, res) => {
 
         db.run(`INSERT INTO ${stock} (stock_name, location, national_price, national_discount, garage_id, warehouse_id)
                 VALUES (?, ?, ?, ?, ?, ?)`, [stock_name, location, price, discount, garage_id, warehouse_id], (err) => {
-                    if(err) {
-                        console.error("Failed to add Stock to database:", err);
-                        res.status(500).send("Internal Server Error");
-                    } else {
-                        console.log("Successfully added Stock to database");
-                        res.redirect(`/dashboard/dashboard.html`);
-                    }
-                })
+            if (err) {
+                console.error("Failed to add Stock to database:", err);
+                res.status(500).send("Internal Server Error");
+            } else {
+                console.log("Successfully added Stock to database");
+                res.redirect(`/dashboard/dashboard.html`);
+            }
+        })
     } catch (error) {
         console.error("Error in addStock request:", error);
         res.status(400).send("Bad Request");
@@ -503,7 +576,7 @@ app.get("/viewStock", async (req, res) => {
                 }
             });
         });
-        
+
         // send available stock info as a JSON response for the frontend
         res.json(availableStock);
 
@@ -516,7 +589,7 @@ app.get("/viewStock", async (req, res) => {
 // order stock route *********************************************************
 app.post("/orderStock", async (req, res) => {
     try {
-        const {} = req.body;
+        const { } = req.body;
 
         // get garage id of origin using the staff
 
