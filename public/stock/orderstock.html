@@ -9,60 +9,81 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Candal|Lora">
     <script src="https://kit.fontawesome.com/09e2129185.js" crossorigin="anonymous"></script>
     <title>Order from Warehouse or Garage</title>
+    <style>
+        body {
+            font-family: 'Candal', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background: rgb(5, 5, 154);
+            border: white 2px solid;
+            color: white;
+            border-radius: 10px;
+            height: 70px;
+            padding: 5px;
+        }
+
+        .heading-container {
+            font-family: Candal;
+        }
+
+        .page-wrapper {
+            max-width: 600px;
+            margin: 30px auto;
+            background: white;
+            padding: 20px 30px;
+            border-radius: 12px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+            border: 1px solid #ddd;
+        }
+
+        h1, h3 {
+            text-align: center;
+            margin: 10px 0;
+        }
+
+        h1 {
+            color: white;
+        }
+
+        h3 {
+            color: #05059a;
+        }
+
+        form select,
+        form input[type="number"],
+        form input[type="submit"] {
+            width: 100%;
+            padding: 12px 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+        }
+
+        form input[type="submit"] {
+            background-color: #05059a;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        form input[type="submit"]:hover {
+            background-color: #38389c;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            margin: 20px 0;
+            color: #333;
+            font-size: 14px;
+        }
+    </style>
 </head>
-
-<style>
-    header {
-        background: rgb(5, 5, 154);
-        border: white 2px solid;
-        color: white;
-        border-radius: 10px;
-        height: 70px;
-        padding: 5px;
-    }
-
-    .heading-container {
-        font-family: Candal;
-    }
-
-    h2 {
-        color: white;
-    }
-
-    .buttons-container {
-        border: solid black 1px;
-        width: 100%;
-        padding: 10px;
-        margin: 0;
-
-    }
-
-    .buttons-container button {
-        width: 80%;
-        height: 50px;
-        background: blue;
-        border-radius: 10px;
-        border: 1px white solid;
-        transition: all .9s;
-        color: white;
-    }
-
-    .login:hover,
-    .signup:hover {
-        background: rgb(56, 56, 156);
-        transition: all .9;
-    }
-
-    .buttons-container a {
-        text-decoration: none;
-        color: white;
-    }
-
-
-    .page-wrapper {
-        border: 2px black solid;
-    }
-</style>
 
 <body>
     <header>
@@ -73,8 +94,7 @@
 
     <div class="page-wrapper">
         <main>
-            <h3>Enter the Details of the Parts to be order</h3>
-
+            <h3>Enter the Details of the Parts to Order</h3>
             <form action="/orderStock" method="post">
                 <div class="orderDetails">
                     <select id="stockSelection" name="stock_name" required>
@@ -92,19 +112,19 @@
                         <option value="Performance parts">Performance Parts</option>
                         <option value="Maintenance parts and Service parts">Maintenance Parts and Service Parts</option>
                     </select>
-                    <br>
+
                     <select id="locationSelection" name="location" required onchange="showHiddenFields()">
                         <option value="" selected disabled hidden>Select location</option>
                         <option value="Warehouse">Warehouse</option>
                         <option value="Garage">Garage</option>
                     </select>
-                    <br>
+
                     <select id="selectWarehouse" name="warehouse_id" style="display: none;" required></select>
                     <select id="selectGarage" name="garage_id" style="display: none;" required></select>
 
-                    <input type="number" placeholder="Enter the quantity. max limit 25">
-
+                    <input type="number" placeholder="Enter the quantity (max 25)">
                 </div>
+
                 <input type="submit" value="Order Parts">
             </form>
         </main>
@@ -165,7 +185,6 @@
         <option value="2">National Auto Supplies</option>
     `;
         }
-
 
         function hideAllLists() {
             garageSelection.style.display = "none";

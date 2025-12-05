@@ -5,15 +5,80 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add stock for purchase at warehouse</title>
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Candal|Lora">
+    <style>
+        body {
+            font-family: 'Candal', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        .page-wrapper {
+            max-width: 600px;
+            margin: 30px auto;
+            background: white;
+            padding: 20px 30px;
+            border-radius: 12px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+            border: 1px solid #ddd;
+        }
+
+        header {
+            display: none; /* header is empty */
+        }
+
+        h2 {
+            text-align: center;
+            color: #05059a;
+            margin-bottom: 20px;
+        }
+
+        form select,
+        form input[type="number"],
+        form input[type="submit"] {
+            width: 100%;
+            padding: 12px 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+        }
+
+        form input[type="submit"] {
+            background-color: #05059a;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        form input[type="submit"]:hover {
+            background-color: #38389c;
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+            color: #333;
+            font-weight: 500;
+        }
+
+        #amountFields {
+            margin-top: 15px;
+        }
+    </style>
 </head>
 
 <body>
     <header>
-
+        <!-- Empty header -->
     </header>
     <div class="page-wrapper">
         <main>
             <form action="/addStock" method="post">
+                <h2>Add Stock to Inventory</h2>
                 <select id="stockSelection" name="stock_name" required>
                     <option value="" disabled selected hidden>Select stock to add</option>
                     <option value="Engine parts">Engine Parts</option>
@@ -29,13 +94,13 @@
                     <option value="Performance parts">Performance Parts</option>
                     <option value="Maintenance parts and Service parts">Maintenance Parts and Service Parts</option>
                 </select>
-                <br>
+
                 <select id="locationSelection" name="location" required onchange="showHiddenFields()">
                     <option value="" selected disabled hidden>Select location</option>
                     <option value="Warehouse">Warehouse</option>
                     <option value="Garage">Garage</option>
                 </select>
-                <br>
+
                 <select id="selectWarehouse" name="warehouse_id" style="display: none;" required></select>
                 <select id="selectGarage" name="garage_id" style="display: none;" required></select>
 
@@ -47,13 +112,12 @@
                     <input type="number" id="nationalDiscount" name="discount">
                 </div>
 
-                <br>
                 <input type="submit" value="Add Stock">
             </form>
         </main>
     </div>
     <footer>
-
+        <!-- Empty footer -->
     </footer>
 
     <script>
@@ -78,6 +142,7 @@
                 hideAllLists();
             }
         });
+
         function showGarageList() {
             hideAllLists();
             garageSelection.style.display = "block";
@@ -105,7 +170,6 @@
     `;
         }
 
-
         function hideAllLists() {
             garageSelection.style.display = "none";
             warehouseSelection.style.display = "none";
@@ -114,7 +178,6 @@
         function showHiddenFields() {
             var locationSelection = document.getElementById("locationSelection");
             var amountFields = document.getElementById("amountFields");
-            
 
             // Check if the selected location is Warehouse
             if (locationSelection.value === "Warehouse" || locationSelection.value === "Garage") {

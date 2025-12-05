@@ -1,82 +1,38 @@
-/* General */
-body {
-    font-family: Candal, sans-serif;
-    background: url('images/background.jpg') no-repeat center center fixed;
-    background-size: cover;
-    margin: 0;
-    padding: 0;
-    color: #fff;
-}
+<!DOCTYPE html>
+<html lang="en">
 
-/* Header */
-header {
-    background: #05059a;
-    border-bottom: 2px solid #fff;
-    border-radius: 10px;
-    padding: 10px 20px;
-    text-align: center;
-}
+<head>
+    <title>Mavwu Retail</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Alfred Mavwu">
+    <meta name="description" content="Official Mavwu Retail Website">
 
-/* Page Wrapper */
-.page-wrapper {
-    max-width: 500px;
-    margin: 50px auto;
-    background: rgba(0, 0, 0, 0.5);
-    border-radius: 10px;
-    padding: 20px;
-    text-align: center;
-}
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Candal|Lora">
+    <script src="https://kit.fontawesome.com/09e2129185.js" crossorigin="anonymous"></script>
+</head>
 
-/* Headings */
-h1 {
-    margin: 0;
-    font-size: 2em;
-}
+<body>
+    <header>
+        <div class="heading-container">
+            <h1>Mavwu's Retail</h1>
+        </div>
+    </header>
 
-h2 {
-    margin-bottom: 30px;
-    font-size: 1.4em;
-}
+    <main class="page-wrapper">
+        <h2>Welcome to the Official Mavwu Retail Website</h2>
+        <div class="buttons-container">
+            <a class="btn login" href="login/login.html">Login</a>
+            <a class="btn signup" href="signup/signup.html">Sign Up</a>
+        </div>
+    </main>
 
-/* Buttons */
-.buttons-container {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
+    <footer>
+        <div class="footer-bottom">
+            &copy; 2024 Mavwu Retail | Designed by Alfred Mavwu
+        </div>
+    </footer>
+</body>
 
-.btn {
-    display: inline-block;
-    padding: 15px 0;
-    background-color: #1a1aff;
-    color: white;
-    text-decoration: none;
-    border-radius: 10px;
-    transition: background 0.3s ease;
-    font-size: 1.1em;
-}
-
-.btn:hover {
-    background-color: #38389c;
-}
-
-/* Footer */
-footer {
-    text-align: center;
-    margin-top: 50px;
-    padding: 10px 0;
-    font-size: 0.9em;
-}
-
-/* Responsive */
-@media (max-width: 600px) {
-    .page-wrapper {
-        margin: 20px;
-        padding: 15px;
-    }
-
-    .btn {
-        font-size: 1em;
-        padding: 12px 0;
-    }
-}
+</html>

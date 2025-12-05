@@ -4,80 +4,68 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign Up for your account</title>
+    <title>Create Your Account</title>
 
+    <!-- Global Styles -->
     <link rel="stylesheet" href="../style.css"> 
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Candal|Lora">
     <script src="https://kit.fontawesome.com/09e2129185.js" crossorigin="anonymous"></script>
 
     <style>
-        header {
-            background: rgb(5, 5, 154);
-            border: white 2px solid;
-            color: white;
-            border-radius: 10px;
-            height: 70px;
-            padding: 5px;
+        /* Styling for forms */
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            padding: 20px;
         }
 
-        .heading-container {
-            font-family: Candal;
-        }
-
-        h2 {
-            color: white;
-        }
-
-        .buttons-container {
-            border: solid black 1px;
+        input {
+            padding: 12px;
+            border-radius: 8px;
+            border: none;
+            font-size: 1em;
             width: 100%;
-            padding: 10px;
-            margin: 0;
-            
         }
 
-        .buttons-container button {
-            width: 80%;
-            height: 50px;
-            background: blue;
-            border-radius: 10px;
-            border: 1px white solid;
-            transition: all .9s;
+        button[type="submit"] {
+            padding: 12px;
+            border-radius: 8px;
+            border: none;
+            background-color: #1a1aff;
             color: white;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: background 0.3s;
         }
 
-        .login:hover, .signup:hover {
-            background: rgb(56, 56, 156);
-            transition: all .9;
-        }
-
-        .page-wrapper {
-            border: 2px black solid;
+        button[type="submit"]:hover {
+            background-color: #38389c;
         }
     </style>
 </head>
 
-<body style="background-image: url('../images/background.jpg');"
+<body>
+
     <header>
         <div class="heading-container">
             <h1>Mavwu's Retail</h1>
         </div>
     </header>
-    <main>
-        <div class="page-wrapper">
-            <form action="/userRegistration" method="post">
-                <h2>Enter your details to Sign Up</h2>
-                <input type="text" id="first_name" name="first_name" placeholder="Enter your first name" required> <br> <br>
-                <input type="text" id="last_name" name="last_name" placeholder="Enter your last name" required> <br> <br>
-                <input type="text" id="email" name="email" placeholder="Enter your email" required> <br> <br>
-                <input type="text" id="phone" name="phone" placeholder="Enter your phone number" required> <br> <br>
-                <input type="password" id="pass" name="password" placeholder="Enter your password" required> <br> <br>
-                <input type="password" id="repass" name="repassword" placeholder="Re-enter your password" required> <br> <br>
 
-                <button type="submit">Sign Up</button>
-            </form>
+    <main class="page-wrapper">
+        <h2>Create your account</h2>
 
-        </div>
+        <form action="/userRegistration" method="post">
+            <input type="text" name="first_name" placeholder="Enter your first name" required>
+            <input type="text" name="last_name" placeholder="Enter your last name" required>
+            <input type="email" name="email" placeholder="Enter your email" required>
+            <input type="text" name="phone" placeholder="Enter your phone number" required>
+            <input type="password" name="password" placeholder="Enter your password" required>
+            <input type="password" name="repassword" placeholder="Re-enter your password" required>
+
+            <button type="submit">Sign Up</button>
+        </form>
     </main>
 
     <footer>
@@ -85,7 +73,7 @@
             &copy; 2024 Mavwu Retail | Designed by Alfred Mavwu
         </div>
     </footer>
-    
+
 </body>
 
 </html>

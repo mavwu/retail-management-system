@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Candal|Lora">
+    <script src="https://kit.fontawesome.com/09e2129185.js" crossorigin="anonymous"></script>
+    <title>Edit Stock</title>
+    <style>
+        body {
+            font-family: 'Candal', sans-serif;
+            background-image: url('../images/background.jpg');
+            background-size: cover;
+            background-position: center;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background: rgb(5, 5, 154);
+            border: white 2px solid;
+            color: white;
+            border-radius: 10px;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        h1 {
+            color: white;
+            margin: 0;
+        }
+
+        .page-wrapper {
+            max-width: 800px;
+            margin: 30px auto;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 20px 30px;
+            border-radius: 12px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+            border: 1px solid #ddd;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        select, input {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 6px;
+            border: 1px solid #aaa;
+        }
+
+        input[type="submit"] {
+            background: blue;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        input[type="submit"]:hover {
+            background: rgb(56, 56, 156);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            margin: 20px 0;
+            color: #333;
+            font-size: 14px;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>Mavwu's Retail</h1>
+    </header>
+
+    <div class="page-wrapper">
+        <h1>Edit Stock</h1>
+        <form action="/editStock" method="post">
+            <select id="stockSelection" name="stock_id" required>
+                <option value="" disabled selected hidden>Select stock to edit</option>
+                <!-- Stock options will be dynamically loaded from backend -->
+            </select>
+
+            <input type="text" name="stock_name" placeholder="Update Stock Name" required>
+            <input type="number" name="price" placeholder="Update Price" required>
+            <input type="number" name="discount" placeholder="Update Discount" required>
+
+            <input type="submit" value="Update Stock">
+        </form>
+    </div>
+
+    <footer>
+        <div class="footer-bottom">
+            &copy; 2024 Mavwu Retail | Designed by Alfred Mavwu
+        </div>
+    </footer>
+
+    <script>
+        // JS to fetch stock options from backend and populate the select box
+        fetch('/viewStock')
+            .then(response => response.json())
+            .then(data => {
+                const stockSelect = document.getElementById('stockSelection');
+                data.forEach(stock => {
+                    const option = document.createElement('option');
+                    option.value = stock.id; // Assuming backend sends 'id'
+                    option.textContent = stock.stock_name;
+                    stockSelect.appendChild(option);
+                });
+            })
+            .catch(err => console.error('Error fetching stocks for edit:', err));
+    </script>
+</body>
+
+</html>

@@ -9,63 +9,72 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Candal|Lora">
     <script src="https://kit.fontawesome.com/09e2129185.js" crossorigin="anonymous"></script>
     <title>Stock Available</title>
-</head>
+    <style>
+        body {
+            font-family: 'Candal', sans-serif;
+            background-image: url('../images/background.jpg');
+            background-size: cover;
+            background-position: center;
+            margin: 0;
+            padding: 0;
+        }
 
-<style>
-    header {
+        header {
             background: rgb(5, 5, 154);
             border: white 2px solid;
             color: white;
             border-radius: 10px;
             height: 70px;
-            padding: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        .heading-container {
-            font-family: Candal;
-        }
-
-        h2 {
+        h1 {
             color: white;
-        }
-
-        .buttons-container {
-            border: solid black 1px;
-            width: 100%;
-            padding: 10px;
             margin: 0;
-            
         }
-
-        .buttons-container button {
-            width: 80%;
-            height: 50px;
-            background: blue;
-            border-radius: 10px;
-            border: 1px white solid;
-            transition: all .9s;
-            color: white;
-        }
-
-        .login:hover, .signup:hover {
-            background: rgb(56, 56, 156);
-            transition: all .9;
-        }
-
-        .buttons-container a {
-            text-decoration: none;
-            color: white;
-        }
-        
 
         .page-wrapper {
-            border: 2px black solid;
+            max-width: 800px;
+            margin: 30px auto;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 20px 30px;
+            border-radius: 12px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+            border: 1px solid #ddd;
         }
-</style>
 
-<body style="background-image: url('../images/background.jpg');">
+        #stockList div {
+            background: #f0f0f0;
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 5px solid #05059a;
+        }
+
+        #stockList h3 {
+            margin: 0 0 5px 0;
+            color: #05059a;
+        }
+
+        #stockList p {
+            margin: 3px 0;
+            color: #333;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            margin: 20px 0;
+            color: #333;
+            font-size: 14px;
+        }
+    </style>
+</head>
+
+<body>
     <header>
-
+        <h1>Mavwu's Retail</h1>
     </header>
 
     <div class="page-wrapper">
